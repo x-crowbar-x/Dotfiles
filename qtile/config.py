@@ -234,15 +234,15 @@ screens = [
         top=bar.Bar(
             [
                 widget.Spacer(
-                        length = 6,
-                        background = colors[4]
+                        length = 11,
+                        #background = colors[4]
                         ),
                 widget.CurrentLayoutIcon(
                 background = colors[4],
                 ),
                 widget.Spacer(
-                        length = 6,
-                        background = colors[4]
+                        length = 5,
+                        #background = colors[4]
                         ),
                 widget.CurrentLayout(
                 foreground = colors[4],
@@ -359,7 +359,7 @@ screens = [
                         fontsize = 14,
                         format = "%H:%M / %d.%m.%Y",
                         fontshadow = colors[15],
-                        padding = 2
+                        padding = 3
                         ),
                 # widget.TextBox(
                 #        text = '',
@@ -410,7 +410,7 @@ screens = [
                        text_closed = '理', text_open = 'ﲅ',
                        foreground = colors[2],
                        background = colors[17],
-                       fontsize = 26,
+                       fontsize = 30,
                        fontshadow = colors[15],
                        widgets=[
                 widget.Net(
