@@ -1,0 +1,109 @@
+env:
+  TERM: xterm-256color
+
+padding:
+    x: 5
+    y: 5
+
+class:
+  instance: Alacritty
+  general: Alacritty
+
+scrolling:
+  history: 6000
+
+  font:
+    normal:
+      family: Mononoki Nerd Font
+      style: Regular
+    bold:
+      family: Mononoki Nerd Font
+      style: Bold
+    italic:
+      family: Mononoki Nerd Font
+      style: Italic
+    bold_italic:
+      family: Mononoki Nerd Font
+      style: Bold Italic
+    size: 12.0
+    offset:
+        x: 1
+        y: 1
+draw_bold_text_with_bright_colors: true
+
+items:
+  - colors:
+      name: 3024 (dark)
+      author: Chris Kempson
+      primary:
+        background: "#090300"
+        foreground: "#a5a2a2"
+      cursor:
+        text: "#090300"
+        cursor: "#a5a2a2"
+      normal:
+        black: "#090300"
+        red: "#db2d20"
+        green: "#01a252"
+        yellow: "#fded02"
+        blue: "#01a0e4"
+        magenta: "#a16a94"
+        cyan: "#b5e4f4"
+        white: "#a5a2a2"
+      bright:
+        black: "#5c5855"
+        red: "#db2d20"
+        green: "#01a252"
+        yellow: "#fded02"
+        blue: "#01a0e4"
+        magenta: "#a16a94"
+        cyan: "#b5e4f4"
+        white: "#f7f7f7"
+  - theme: 3024.dark
+colors:
+  # Default colors
+  primary:
+    background: '#282a36'
+    foreground: '#f8f8f2'
+
+  # Normal colors
+  normal:
+    black: '#000000'
+    red: '#ff5555'
+    green: '#50fa7b'
+    yellow: '#f1fa8c'
+    blue: '#caa9fa'
+    magenta: '#ff79c6'
+    cyan: '#8be9fd'
+    white: '#bfbfbf'
+
+  # Bright colors
+  bright:
+    black: '#575b70'
+    red: '#ff6e67'
+    green: '#5af78e'
+    yellow: '#f4f99d'
+    blue: '#caa9fa'
+    magenta: '#ff92d0'
+    cyan: '#9aedfe'
+    white: '#e6e6e6'
+theme: Dracula
+
+background_opacity: 0.70
+
+save_to_clipboard: true
+
+cursor:
+  # Values for `style`:
+  #   - ▇ Block
+  #   - _ Underline
+  #   - | Beam
+  style: Block
+
+unfocused_hollow: true
+
+working_directory: None
+
+#key_bindings:
+    # (Windows, Linux, and BSD only)
+  #- { key: , mods: Control action:  }
