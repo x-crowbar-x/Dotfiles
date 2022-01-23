@@ -9,7 +9,6 @@ from typing import List  # noqa: F401
 
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 from libqtile.widget import Spacer
 
 
@@ -250,7 +249,7 @@ screens = [
                         foreground = colors[4],
                         ),
                 widget.GroupBox(
-                       fontsize = 25,
+                       fontsize = 24,
                        margin_y = 5,
                        margin_x = 1,
                        padding_y = 5,
@@ -292,7 +291,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[16],
                        padding = 0,
-                       fontsize = 36,
+                       fontsize = 33,
                        fontshadow = colors[15]
                        ),
                 widget.Image(
@@ -317,7 +316,7 @@ screens = [
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 36,
+                       fontsize = 33,
                        fontshadow = colors[15]
                        ),
                 widget.KeyboardLayout(
@@ -338,7 +337,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 36,
+                       fontsize = 33,
                        fontshadow = colors[15]
                        ),
                 widget.Clock(
@@ -360,7 +359,7 @@ screens = [
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 36,
+                       fontsize = 33,
                        fontshadow = colors[15]
                        ),
                 widget.TextBox(
@@ -390,7 +389,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 36,
+                       fontsize = 33,
                        fontshadow = colors[15]
                        ),
                 widget.WidgetBox(
@@ -399,7 +398,7 @@ screens = [
                        background = colors[17],
                        fontsize = 25,
                        fontshadow = colors[15],
-                       padding = 5,
+                       padding = 6,
                        widgets=[
                 widget.TextBox(
                        text = '  ',
@@ -407,7 +406,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[2],
                        fontshadow = colors[15],
-                       fontsize = 20
+                       fontsize = 17
                        ),
                 widget.Net(
                         interface = "wlan0",
@@ -427,7 +426,7 @@ screens = [
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 36,
+                       fontsize = 33,
                        fontshadow = colors[15]
                        ),
                 widget.CPU(
@@ -446,13 +445,13 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 36,
+                       fontsize = 33,
                        fontshadow = colors[15]
                        ),
                 ]
             ),
         ],
-            size = 26,
+            size = 22,
             opacity = 1,
         ),
     ),
@@ -474,23 +473,16 @@ follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
+    # Run the utility of `xprop` to see the wm class and name of an X
     *layout.Floating.default_float_rules,
-    Match(wm_class='confirmreset'),  # gitk
-    Match(wm_class='makebranch'),  # gitk
-    Match(wm_class='maketag'),  # gitk
-    Match(wm_class='ssh-askpass'),  # ssh-askpass
-    Match(title='branchdialog'),  # gitk
-    Match(title='pinentry'),  # GPG key password entry
-    Match(wm_class='error'),
-    Match(wm_class='download'),
-    Match(wm_class='dialog'),
-    Match(wm_class='confirm'),
-    Match(wm_class='splash'),
-    Match(wm_class='toolbar'),
+    Match(wm_class='confirmreset'),
     Match(wm_class='makebranch'),
+    Match(wm_class='maketag'),
+    Match(wm_class='ssh-askpass'),
+    Match(title='branchdialog'),
+    Match(title='pinentry'),
+    Match(wm_class='splash'),
     Match(title='Confirmation'),
-    Match(title='Library'),
     Match(title='Friends List'),
 ])
 auto_fullscreen = True
