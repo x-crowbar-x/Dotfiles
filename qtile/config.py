@@ -42,6 +42,8 @@ keys = [
         desc="Thunar"),
     Key([mod], "o", lazy.spawn(myOfficeSuite),
         desc="Libreoffice"),
+    Key([mod], "a", lazy.spawn("atom"),
+        desc="Launch Atom text editor"),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -113,7 +115,8 @@ keys = [
     desc='toggle window between minimum and maximum sizes'),
     Key([mod], "n", lazy.layout.normalize(),
     desc='normalize window size ratios'),
-
+    Key([mod], "t", lazy.window.toggle_floating(),
+    desc='Toggle floating layout'),
 ]
 
 groups = [Group(i) for i in [
