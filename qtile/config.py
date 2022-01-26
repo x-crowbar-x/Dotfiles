@@ -3,7 +3,7 @@ import os
 import re
 import socket
 import subprocess
-from libqtile import layout, bar, widget, qtile
+from libqtile import layout, bar, widget, hook, qtile
 
 from typing import List  # noqa: F401
 
@@ -22,6 +22,10 @@ myBrowser = "firefox"
 myFileManager = "thunar"
 myOfficeSuite = "libreoffice"
 home = os.path.expanduser('~')
+
+@hook.subscribe.startup_once
+def autostart():
+    subprocess.Popen([home + '/.config/qtile/autostart.sh'])
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -91,8 +95,8 @@ keys = [
     # Audio controls
 
     #Key([], "XF86AudioMute", lazy.spawn("pamixer --toggle-mute")),
-    #Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer --decrease 5")),
-    #Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer --increase 5")),
+    #Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer --decrease 2")),
+    #Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer --increase 2")),
     Key([], "XF86AudioMicMute", lazy.spawn("pamixer --source 46 -t")),
     # Music control buttons
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
@@ -175,7 +179,7 @@ colors = [["#282a36", "#282a36"], # 0
           ["#16557a", "#25536d"]] # 17
 
 layout_theme = {"border_width": 3,
-                "margin": 6,
+                "margin": 7,
                 "border_focus": colors[4],
                 "border_normal": colors[17]
                 }
@@ -187,10 +191,10 @@ layouts = [
     #layout.Zoomy(**layout_theme)
     #layout.Tile(**layout_theme),
     #layout.VerticalTile(**layout_theme),
+    #layout.Columns(**layout_theme),
     layout.MonadTall(**layout_theme),
     layout.MonadWide(**layout_theme),
     layout.Max(**layout_theme),
-    layout.Columns(**layout_theme),
     layout.Stack(**layout_theme),
     layout.TreeTab(
         font = "mononoki",
@@ -269,7 +273,28 @@ screens = [
                         ),
                 widget.Sep(
                         linewidth = 2,
-                        padding = 3,
+                        padding = 5,
+                        foreground = colors[4],
+                        ),
+                widget.WidgetBox(
+                       text_closed = '', text_open = '',
+                       foreground = colors[4],
+                       background = colors[17],
+                       fontsize = 24,
+                       fontshadow = colors[15],
+                       padding = 5,
+                       widgets=[
+                widget.Cmus(
+                        play_color = colors[4],
+                        noplay_color = colors[17],
+                        foreground = colors[4],
+                        fontsize = 20,
+                        fontshadow = colors[17],
+                        update_interval = 0.5
+                        )]),
+                widget.Sep(
+                        linewidth = 2,
+                        padding = 5,
                         foreground = colors[4],
                         ),
                 widget.Spacer(
@@ -329,6 +354,14 @@ screens = [
                         configured_keyboards = ['us','ru'],
                         fontshadow = colors[15],
                         ),
+                # widget.KeyboardKbdd(
+                #         foreground = colors[2],
+                #         background = colors[3],
+                #         configured_keyboards = ['us','ru'],
+                #         fontshadow = colors[15],
+                #         padding = 6,
+                #         update_interval = 1
+                #         ),
                 widget.Image(
                         background = colors[3],
                         filename = PacmanGhostImg2,

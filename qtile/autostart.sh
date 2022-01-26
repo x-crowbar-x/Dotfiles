@@ -1,10 +1,12 @@
+#!/usr/bin/env bash
+
 xwallpaper --stretch $HOME/Pictures/arch.png &
-pamixer -m &
+kbdd &
 pamixer -set-volume 0
 picom &
 nm-applet &
 cbatticon &
 blueman-applet &
-sleep
+#sleep 0.5
 mpv /usr/share/mathjax2/extensions/a11y/invalid_keypress.mp3
 volumeicon &
