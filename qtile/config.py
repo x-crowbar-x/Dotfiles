@@ -1,15 +1,14 @@
-
+# -*- coding: utf-8 -*-
 import os
 import re
 import socket
 import subprocess
 from libqtile import layout, bar, widget, hook, qtile
-
 from typing import List  # noqa: F401
-
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.widget import Spacer
+
 
 
 mod = "mod4"
@@ -23,9 +22,12 @@ myFileManager = "thunar"
 myOfficeSuite = "libreoffice"
 home = os.path.expanduser('~')
 
+
+
 @hook.subscribe.startup_once
 def autostart():
     subprocess.Popen([home + '/.config/qtile/autostart.sh'])
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -48,6 +50,10 @@ keys = [
         desc="Libreoffice"),
     Key([mod], "a", lazy.spawn("atom"),
         desc="Launch Atom text editor"),
+    Key([mod], "x", lazy.spawn(terminal),
+        desc="Launch terminal"),
+
+    Key([mod], "c", lazy.spawn("atom .config/qtile/config.py")),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -76,7 +82,7 @@ keys = [
     # multiple stack panes
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"),
-    Key([mod], "x", lazy.spawn(terminal), desc="Launch terminal"),
+
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -89,8 +95,8 @@ keys = [
     # Brightness control
     Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(),
         desc="Next keyboard layout."),
-        Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +10%")),
-        Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 10%- ")),
+        Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +5%")),
+        Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%- ")),
 
     # Audio controls
 
@@ -105,9 +111,9 @@ keys = [
     Key([], "XF86AudioStop", lazy.spawn("playerctl stop")),
 
     # Screenshot
-    Key([], "Print", lazy.spawn('scrot ' + home + '/Pictures/'),
+    Key([], "Print", lazy.spawn(home + "/.config/qtile/full_screenshot.sh"),
     desc='Take a screenshot of the whole screen'),
-    Key([mod3], "Print", lazy.spawn('scrot -s ' + home + '/Pictures/'),
+    Key([mod3], "Print", lazy.spawn(home + "/.config/qtile/select_screenshot.sh"),
     desc='Select an area of the screen to take a screenshot'),
 
     # Window controls
@@ -360,7 +366,7 @@ screens = [
                 #         configured_keyboards = ['us','ru'],
                 #         fontshadow = colors[15],
                 #         padding = 6,
-                #         update_interval = 1
+                #         fontsize = 19
                 #         ),
                 widget.Image(
                         background = colors[3],
@@ -468,7 +474,7 @@ screens = [
                 widget.CPU(
                         foreground = colors[2],
                         background = colors[3],
-                        format = 'CPU {load_percent}%',
+                        format = 'CPU Load {load_percent}',
                         fontshadow = colors[15],
                         ),
                 widget.Image(
@@ -522,7 +528,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(title='Friends List'),
 ])
 auto_fullscreen = True
-focus_on_window_activation = "focus"
+focus_on_window_activation = "smart"
 reconfigure_screens = True
 
 # If things like steam games want to auto-minimize themselves when losing
