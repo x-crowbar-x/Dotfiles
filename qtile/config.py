@@ -167,8 +167,8 @@ for i, group in enumerate(groups):
 
 colors = [["#282a36", "#282a36"], # 0
           ["#44475a", "#44475a"], # 1
-          ["#f8f8f2", "#a8a8a6"], # 2
-          ["#6272a4", "#798cc4"], # 3
+          ["#f8f8f2", "#f8f8f2"], # 2
+          ["#6272a4", "#6272a4"], # 3
           ["#80d2e5", "#6387f2"], # 4
           ["#50fa7b", "#29ad4a"], # 5
           ["#ffb86c", "#bc874f"], # 6
@@ -181,8 +181,9 @@ colors = [["#282a36", "#282a36"], # 0
           ["#096166", "#108389"], # 13
           ["#361ccc", "#2a14a8"], # 14
           ["#414458", "#575b75"], # 15
-          ["#2b2e3b", "#363949"], # 16
-          ["#16557a", "#25536d"]] # 17
+          ["#2b2e3b", "#2b2e3b"], # 16
+          ["#16557a", "#16557a"], # 17
+          ["#80d2e5", "#80d2e5"]] # 18
 
 layout_theme = {"border_width": 3,
                 "margin": 7,
@@ -203,30 +204,30 @@ layouts = [
     layout.Max(**layout_theme),
     layout.Stack(**layout_theme),
     layout.TreeTab(
-        font = "mononoki",
-        fontsize = 14,
+        font = 'JetBrains Mono',
+        fontsize = 13,
         bg_color = colors[16],
-        active_bg = colors[9],
-        inactive_bg = colors[3],
-        inactive_fg = colors[10],
+        active_bg = colors[4],
+        inactive_bg = colors[17],
+        inactive_fg = colors[2],
+        active_fg = colors[13],
         padding_left = 0,
-        padding_x = 0,
+        padding_x = 2,
         padding_y =5,
         section_top =10,
         section_bottom = 20,
         vspace = 3,
-        panel_width = 210),
+        panel_width = 220),
     layout.Floating(**layout_theme),
 ]
-
 
 
 prompt = "[{0}@{1}]$ ".format(os.environ["USER"], socket.gethostname())
 
 # Default widget settings
 widget_defaults = dict(
-    font = 'Ubuntu Mono Bold',
-    fontsize = 16,
+    font = 'JetBrains Mono SemiBold',
+    fontsize = 14,
     padding = 2,
     background = colors[16],
 )
@@ -237,7 +238,7 @@ PacmanGhostImg1 = "~/.config/qtile/icons/pacman-ghost1.png"
 PacmanGhostImg2 = "~/.config/qtile/icons/pacman-ghost2.png"
 
 # I have only one screen,
-# so didn't bother to create different functions
+# so didn't bother to define different functions
 screens = [
     Screen(
         top=bar.Bar(
@@ -262,7 +263,7 @@ screens = [
                         foreground = colors[4],
                         ),
                 widget.GroupBox(
-                       fontsize = 24,
+                       fontsize = 22,
                        margin_y = 5,
                        margin_x = 1,
                        padding_y = 5,
@@ -284,9 +285,9 @@ screens = [
                         ),
                 widget.WidgetBox(
                        text_closed = '', text_open = '',
-                       foreground = colors[4],
-                       background = colors[17],
-                       fontsize = 24,
+                       foreground = colors[18],
+                       #background = colors[16],
+                       fontsize = 25,
                        fontshadow = colors[15],
                        padding = 5,
                        widgets=[
@@ -294,7 +295,7 @@ screens = [
                         play_color = colors[4],
                         noplay_color = colors[17],
                         foreground = colors[4],
-                        fontsize = 20,
+                        fontsize = 19,
                         fontshadow = colors[17],
                         update_interval = 0.5
                         )]),
@@ -314,19 +315,19 @@ screens = [
                         fontshadow = colors[16],
                         ),
                 widget.WindowName(
-                        fontsize = 14,
+                        fontsize = 13,
                         foreground = colors[2],
                         fontshadow = colors[16]
                         ),
     # System tray begins here
                 widget.TextBox(
                        text = '',
-                       font = "Ubuntu Mono",
+                       font = 'Ubuntu Mono',
                        background = colors[17],
                        foreground = colors[16],
                        padding = 0,
-                       fontsize = 33,
-                       fontshadow = colors[15]
+                       fontsize = 29,
+                       #fontshadow = colors[15]
                        ),
                 widget.Image(
                         background = colors[17],
@@ -337,7 +338,7 @@ screens = [
                 widget.Systray(
                         background = colors[17],
                         padding = 0,
-                        icon_size = 26
+                        icon_size = 25
                         ),
                 widget.Image(
                         background = colors[17],
@@ -346,17 +347,17 @@ screens = [
                         ),
                 widget.TextBox(
                        text = '',
-                       font = "Ubuntu Mono",
+                       font = 'Ubuntu Mono',
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 33,
-                       fontshadow = colors[15]
+                       fontsize = 29,
+                       #fontshadow = colors[15]
                        ),
                 widget.KeyboardLayout(
                         foreground = colors[2],
                         background = colors[3],
-                        padding = 6,
+                        padding = 5,
                         configured_keyboards = ['us','ru'],
                         fontshadow = colors[15],
                         ),
@@ -375,12 +376,12 @@ screens = [
                         ),
                 widget.TextBox(
                        text = '',
-                       font = "Ubuntu Mono",
+                       font = 'Ubuntu Mono',
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 33,
-                       fontshadow = colors[15]
+                       fontsize = 29,
+                       #fontshadow = colors[15]
                        ),
                 widget.Clock(
                         foreground = colors[2],
@@ -395,23 +396,31 @@ screens = [
                         padding = 3,
                         mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('gimp')}
                         ),
+                widget.Spacer(
+                        background = colors[17],
+                        length = 1,
+                        ),
                 widget.TextBox(
                        text = '',
-                       font = "Ubuntu Mono",
+                       font = 'Ubuntu Mono',
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 33,
-                       fontshadow = colors[15]
+                       fontsize = 29,
+                       #fontshadow = colors[15]
                        ),
+                widget.Spacer(
+                        background = colors[3],
+                        length = 5,
+                        ),
                 widget.TextBox(
                         text = '',
-                        font = "Ubuntu Mono",
+                        #font = "Ubuntu Mono",
                         background = colors[3],
                         foreground = colors[2],
                         padding = 0,
-                        fontshadow = colors[15],
-                        fontsize = 27
+                        #fontshadow = colors[15],
+                        fontsize = 23
                         ),
                 widget.Memory(
                         foreground = colors[2],
@@ -431,7 +440,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 33,
+                       fontsize = 29,
                        fontshadow = colors[15]
                        ),
                 widget.WidgetBox(
@@ -468,8 +477,8 @@ screens = [
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 33,
-                       fontshadow = colors[15]
+                       fontsize = 29,
+                       #fontshadow = colors[15]
                        ),
                 widget.CPU(
                         foreground = colors[2],
@@ -487,13 +496,13 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 33,
-                       fontshadow = colors[15]
+                       fontsize = 29,
+                       #fontshadow = colors[15]
                        ),
                 ]
             ),
         ],
-            size = 22,
+            size = 20,
             opacity = 1,
         ),
     ),
