@@ -16,10 +16,10 @@ mod1 = "alt"
 mod2 = "control"
 mod3 = "shift"
 
-terminal = "alacritty"
-myBrowser = "firefox"
-myFileManager = "thunar"
-myOfficeSuite = "libreoffice"
+# terminal = "alacritty"
+# myBrowser = "firefox"
+# myFileManager = "thunar"
+# myOfficeSuite = "libreoffice"
 home = os.path.expanduser('~')
 
 
@@ -42,18 +42,21 @@ keys = [
         desc="Move window focus to other window"),
 
     # Launch applications
-    Key([mod], "f", lazy.spawn(myBrowser),
-        desc="Firefox"),
-    Key([mod], "e", lazy.spawn(myFileManager),
-        desc="Thunar"),
-    Key([mod], "o", lazy.spawn(myOfficeSuite),
-        desc="Libreoffice"),
-    Key([mod], "a", lazy.spawn("atom"),
-        desc="Launch Atom text editor"),
-    Key([mod], "x", lazy.spawn(terminal),
-        desc="Launch terminal"),
-
-    Key([mod], "c", lazy.spawn("atom .config/qtile/config.py")),
+    # Key([mod], "f", lazy.spawn(myBrowser),
+    #     desc="Firefox"),
+    # Key([mod], "e", lazy.spawn(myFileManager),
+    #     desc="Thunar"),
+    # Key([mod], "o", lazy.spawn(myOfficeSuite),
+    #     desc="Libreoffice"),
+    # Key([mod], "a", lazy.spawn("atom"),
+    #     desc="Launch Atom text editor"),
+    # Key([mod], "x", lazy.spawn(terminal),
+    #     desc="Launch terminal"),
+    # Key([mod2, "shift"], "f", lazy.spawn("catfish"),
+    #     desc="Search for files with catfish"),
+    #
+    # Key([mod], "c", lazy.spawn("atom .config/qtile/config.py"),
+    #     desc="Open this Qtile confing"),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -167,9 +170,9 @@ for i, group in enumerate(groups):
 
 colors = [["#282a36", "#282a36"], # 0
           ["#44475a", "#44475a"], # 1
-          ["#f8f8f2", "#f8f8f2"], # 2
-          ["#6272a4", "#6272a4"], # 3
-          ["#80d2e5", "#6387f2"], # 4
+          ["#e9f0f3", "#e9f0f3"], # 2
+          ["#3880b1", "#3880b1"], # 3
+          ["#40abbf", "#89f2ff"], # 4
           ["#50fa7b", "#29ad4a"], # 5
           ["#ffb86c", "#bc874f"], # 6
           ["#ff79c6", "#a55181"], # 7
@@ -181,8 +184,8 @@ colors = [["#282a36", "#282a36"], # 0
           ["#096166", "#108389"], # 13
           ["#361ccc", "#2a14a8"], # 14
           ["#414458", "#575b75"], # 15
-          ["#2b2e3b", "#2b2e3b"], # 16
-          ["#16557a", "#16557a"], # 17
+          ["#172b60", "#172b60"], # 16
+          ["#164789", "#164789"], # 17
           ["#80d2e5", "#80d2e5"]] # 18
 
 layout_theme = {"border_width": 3,
@@ -227,7 +230,7 @@ prompt = "[{0}@{1}]$ ".format(os.environ["USER"], socket.gethostname())
 # Default widget settings
 widget_defaults = dict(
     font = 'JetBrains Mono SemiBold',
-    fontsize = 14,
+    fontsize = 15,
     padding = 2,
     background = colors[16],
 )
@@ -236,6 +239,7 @@ extension_defaults = widget_defaults.copy()
 PacmanImage = "~/.config/qtile/icons/pacman.png"
 PacmanGhostImg1 = "~/.config/qtile/icons/pacman-ghost1.png"
 PacmanGhostImg2 = "~/.config/qtile/icons/pacman-ghost2.png"
+TuxImg = "/home/crowbar/Downloads/tux-icon.png"
 
 # I have only one screen,
 # so didn't bother to define different functions
@@ -246,24 +250,32 @@ screens = [
                 widget.Spacer(
                         length = 10,
                         ),
-                widget.CurrentLayoutIcon(
-                background = colors[4],
-                fontsize = 13
-                ),
+                widget.Image(
+                        filename = TuxImg,
+                        scale = "False",
+                        margin_x = None,
+                        margin_y = None),
+                # widget.Spacer(
+                #         length = 10,
+                #         ),
+                # widget.CurrentLayoutIcon(
+                # background = colors[3],
+                # fontsize = 10
+                # ),
                 widget.Spacer(
                         length = 5,
                         ),
-                widget.CurrentLayout(
-                        foreground = colors[4],
-                        fontshadow = colors[17],
-                        fontsize = 14),
+                # widget.CurrentLayout(
+                #         foreground = colors[4],
+                #         fontshadow = colors[17],
+                #         fontsize = 14),
                 widget.Sep(
                         linewidth = 2,
                         padding = 3,
                         foreground = colors[4],
                         ),
                 widget.GroupBox(
-                       fontsize = 22,
+                       fontsize = 25,
                        margin_y = 5,
                        margin_x = 1,
                        padding_y = 5,
@@ -272,7 +284,7 @@ screens = [
                        active = colors[2],
                        inactive = colors[4],
                        rounded = True,
-                       highlight_color = colors[3],
+                       highlight_color = colors[12],
                        highlight_method = "line",
                        this_current_screen_border = colors[17],
                        this_screen_border = colors[4],
@@ -315,9 +327,9 @@ screens = [
                         fontshadow = colors[16],
                         ),
                 widget.WindowName(
-                        fontsize = 13,
-                        foreground = colors[2],
-                        fontshadow = colors[16]
+                        fontsize = 0,
+                        # foreground = colors[2],
+                        # fontshadow = colors[16]
                         ),
     # System tray begins here
                 widget.TextBox(
@@ -326,7 +338,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[16],
                        padding = 0,
-                       fontsize = 29,
+                       fontsize = 37,
                        #fontshadow = colors[15]
                        ),
                 widget.Image(
@@ -351,7 +363,7 @@ screens = [
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 29,
+                       fontsize = 37,
                        #fontshadow = colors[15]
                        ),
                 widget.KeyboardLayout(
@@ -380,7 +392,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 29,
+                       fontsize = 37,
                        #fontshadow = colors[15]
                        ),
                 widget.Clock(
@@ -406,13 +418,12 @@ screens = [
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 29,
+                       fontsize = 37,
                        #fontshadow = colors[15]
                        ),
                 widget.Spacer(
                         background = colors[3],
-                        length = 5,
-                        ),
+                        length = 5),
                 widget.TextBox(
                         text = '',
                         #font = "Ubuntu Mono",
@@ -420,15 +431,14 @@ screens = [
                         foreground = colors[2],
                         padding = 0,
                         #fontshadow = colors[15],
-                        fontsize = 23
-                        ),
+                        fontsize = 37),
                 widget.Memory(
                         foreground = colors[2],
                         background = colors[3],
                         measure_mem = 'M',
                         update_interval = 3.0,
                         fontshadow = colors[15],
-                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e btop')},
                         ),
                 widget.Image(
                         background = colors[3],
@@ -440,14 +450,14 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 29,
+                       fontsize = 37,
                        fontshadow = colors[15]
                        ),
                 widget.WidgetBox(
                        text_closed = '理', text_open = 'ﲅ',
                        foreground = colors[2],
                        background = colors[17],
-                       fontsize = 25,
+                       fontsize = 30,
                        fontshadow = colors[15],
                        padding = 6,
                        widgets=[
@@ -457,7 +467,7 @@ screens = [
                        background = colors[17],
                        foreground = colors[2],
                        fontshadow = colors[15],
-                       fontsize = 17
+                       fontsize = 18
                        ),
                 widget.Net(
                         interface = "wlan0",
@@ -477,7 +487,7 @@ screens = [
                        background = colors[3],
                        foreground = colors[17],
                        padding = 0,
-                       fontsize = 29,
+                       fontsize = 30,
                        #fontshadow = colors[15]
                        ),
                 widget.CPU(
@@ -496,13 +506,13 @@ screens = [
                        background = colors[17],
                        foreground = colors[3],
                        padding = 0,
-                       fontsize = 29,
+                       fontsize = 30,
                        #fontshadow = colors[15]
                        ),
                 ]
             ),
         ],
-            size = 20,
+            size = 23,
             opacity = 1,
         ),
     ),
