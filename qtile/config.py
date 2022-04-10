@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-import re
-import socket
+# import re
+# import socket
 import subprocess
 from libqtile import layout, bar, widget, hook, qtile
 from typing import List  # noqa: F401
@@ -9,19 +9,16 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.widget import Spacer
 
-
-
 mod = "mod4"
 mod1 = "alt"
 mod2 = "control"
 mod3 = "shift"
 
-# terminal = "alacritty"
-# myBrowser = "firefox"
-# myFileManager = "thunar"
-# myOfficeSuite = "libreoffice"
+terminal = "alacritty"
+myBrowser = "firefox"
+myFileManager = "thunar"
+myOfficeSuite = "libreoffice"
 home = os.path.expanduser('~')
-
 
 
 @hook.subscribe.startup_once
@@ -33,6 +30,8 @@ keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
 
+    Key([mod], "q", lazy.hide_show_bar(), desc="Toggles between hide/show the bar"),
+
     # Switch between windows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
@@ -42,21 +41,21 @@ keys = [
         desc="Move window focus to other window"),
 
     # Launch applications
-    # Key([mod], "f", lazy.spawn(myBrowser),
-    #     desc="Firefox"),
-    # Key([mod], "e", lazy.spawn(myFileManager),
-    #     desc="Thunar"),
-    # Key([mod], "o", lazy.spawn(myOfficeSuite),
-    #     desc="Libreoffice"),
-    # Key([mod], "a", lazy.spawn("atom"),
-    #     desc="Launch Atom text editor"),
-    # Key([mod], "x", lazy.spawn(terminal),
-    #     desc="Launch terminal"),
-    # Key([mod2, "shift"], "f", lazy.spawn("catfish"),
-    #     desc="Search for files with catfish"),
-    #
-    # Key([mod], "c", lazy.spawn("atom .config/qtile/config.py"),
-    #     desc="Open this Qtile confing"),
+    Key([mod], "f", lazy.spawn(myBrowser),
+        desc="Firefox"),
+    Key([mod], "e", lazy.spawn(myFileManager),
+        desc="Thunar"),
+    Key([mod], "o", lazy.spawn(myOfficeSuite),
+        desc="Libreoffice"),
+    Key([mod], "a", lazy.spawn("atom"),
+        desc="Launch Atom text editor"),
+    Key([mod], "x", lazy.spawn(terminal),
+        desc="Launch terminal"),
+    Key([mod2, "shift"], "f", lazy.spawn("catfish"),
+        desc="Search for files with catfish"),
+
+    Key([mod], "c", lazy.spawn("atom .config/qtile/config.py"),
+        desc="Open this Qtile confing"),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -86,26 +85,23 @@ keys = [
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"),
 
-
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
 
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"),
+    Key([mod], "r", lazy.spawn("dmenu_run -p 'Run: '"),
+        desc="Run Launcher"),
     # Brightness control
-    Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(),
-        desc="Next keyboard layout."),
-        Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +5%")),
-        Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%- ")),
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +5%")),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%- ")),
 
     # Audio controls
 
-    #Key([], "XF86AudioMute", lazy.spawn("pamixer --toggle-mute")),
-    #Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer --decrease 2")),
-    #Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer --increase 2")),
+    # Key([], "XF86AudioMute", lazy.spawn("pamixer --toggle-mute")),
+    # Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer --decrease 2")),
+    # Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer --increase 2")),
     Key([], "XF86AudioMicMute", lazy.spawn("pamixer --source 46 -t")),
     # Music control buttons
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
@@ -115,25 +111,25 @@ keys = [
 
     # Screenshot
     Key([], "Print", lazy.spawn(home + "/.config/qtile/full_screenshot.sh"),
-    desc='Take a screenshot of the whole screen'),
+        desc='Take a screenshot of the whole screen'),
     Key([mod3], "Print", lazy.spawn(home + "/.config/qtile/select_screenshot.sh"),
-    desc='Select an area of the screen to take a screenshot'),
+        desc='Select an area of the screen to take a screenshot'),
 
     # Window controls
     Key([mod], "h", lazy.layout.shrink(), lazy.layout.decrease_nmaster(),
-    desc='Shrink window (MonadTall), decrease number in master pane (Tile)'),
+        desc='Shrink window (MonadTall), decrease number in master pane (Tile)'),
     Key([mod], "l", lazy.layout.grow(), lazy.layout.increase_nmaster(),
-    desc='Expand window (MonadTall), increase number in master pane (Tile)'),
+        desc='Expand window (MonadTall), increase number in master pane (Tile)'),
     Key([mod], "m", lazy.layout.maximize(),
-    desc='toggle window between minimum and maximum sizes'),
+        desc='toggle window between minimum and maximum sizes'),
     Key([mod], "n", lazy.layout.normalize(),
-    desc='normalize window size ratios'),
+        desc='normalize window size ratios'),
     Key([mod], "t", lazy.window.toggle_floating(),
-    desc='Toggle floating layout'),
+        desc='Toggle floating layout'),
 ]
 
 groups = [Group(i) for i in [
-    "", "", "",  "", "",
+    "", "", "", "", "",
 ]]
 
 for i, group in enumerate(groups):
@@ -144,6 +140,7 @@ for i, group in enumerate(groups):
         # Send window to workspace N
         Key([mod, "shift"], actual_key, lazy.window.togroup(group.name))
     ])
+
 # groups = [Group("1", layout='monadtall'),
 #           Group("2", layout='monadtall'),
 #           Group("3", layout='monadtall'),
@@ -166,358 +163,315 @@ for i, group in enumerate(groups):
 #         #     desc="move focused window to group {}".format(i.name)),
 #     ])
 
-
-
-colors = [["#282a36", "#282a36"], # 0
-          ["#44475a", "#44475a"], # 1
-          ["#e9f0f3", "#e9f0f3"], # 2
-          ["#3880b1", "#3880b1"], # 3
-          ["#40abbf", "#89f2ff"], # 4
-          ["#50fa7b", "#29ad4a"], # 5
-          ["#ffb86c", "#bc874f"], # 6
-          ["#ff79c6", "#a55181"], # 7
-          ["#bd93f9", "#aa7bed"], # 8
-          ["#ff5555", "#a03636"], # 9
-          ["#f1fa8c", "#bac44c"], # 10
-          ["#ae05fc", "#aa7bed"], # 11
-          ["#0973e5", "#0b4d93"], # 12
-          ["#096166", "#108389"], # 13
-          ["#361ccc", "#2a14a8"], # 14
-          ["#414458", "#575b75"], # 15
-          ["#172b60", "#172b60"], # 16
-          ["#164789", "#164789"], # 17
-          ["#80d2e5", "#80d2e5"]] # 18
+colors = [["#282a36", "#282a36"],  # 0
+          ["#44475a", "#44475a"],  # 1
+          ["#d8d8d8", "#d8d8d8"],  # 2
+          ["#3080b1", "#3080b1"],  # 3
+          ["#40abbf", "#89f2ff"],  # 4
+          ["#c3e88d", "#a1b56c"],  # 5
+          ["#ffe585", "#ffe585"],  # 6
+          ["#f5c2e7", "#f5c2e7"],  # 7
+          ["#d6acff", "#aa7bed"],  # 8
+          ["#ab4642", "#ab4642"],  # 9
+          ["#f7ca88", "#f7ca88"],  # 10
+          ["#ae05fc", "#aa7bed"],  # 11
+          ["#0b4d93", "#0b4d93"],  # 12
+          ["#ff6e6e", "#ff6e6e"],  # 13
+          ["#82aaff", "#82aaff"],  # 14
+          ["#414458", "#575b75"],  # 15
+          ["#172b60", "#172b60"],  # 16
+          ["#164789", "#164789"],  # 17
+          ["#7AEEAA", "#7AEEAA"],  # 18
+          ["#f28fad", "#ba8baf"],  # 19
+          ["#00000000", "#00000000"], # 20
+          ["#aa7bed", "#aa7bed"]] # 21
 
 layout_theme = {"border_width": 3,
-                "margin": 7,
-                "border_focus": colors[4],
-                "border_normal": colors[17]
+                "margin": 5,
+                "single_margin": 0,
+                "single_border_width": 1,
+                "border_focus": colors[8],
+                "border_normal": colors[15]
                 }
 
 layouts = [
-    #layout.Matrix(**layout_theme),
-    #layout.Bsp(**layout_theme),
-    #layout.RatioTile(**layout_theme),
-    #layout.Zoomy(**layout_theme)
-    #layout.Tile(**layout_theme),
-    #layout.VerticalTile(**layout_theme),
-    #layout.Columns(**layout_theme),
+    # layout.Matrix(**layout_theme),
+    # layout.Bsp(**layout_theme),
+    # layout.RatioTile(**layout_theme),
+    # layout.Zoomy(**layout_theme)
+    # layout.Tile(**layout_theme),
+    # layout.VerticalTile(**layout_theme),
+    # layout.Columns(**layout_theme),
+    # layout.MonadWide(**layout_theme),
     layout.MonadTall(**layout_theme),
-    layout.MonadWide(**layout_theme),
     layout.Max(**layout_theme),
     layout.Stack(**layout_theme),
-    layout.TreeTab(
-        font = 'JetBrains Mono',
-        fontsize = 13,
-        bg_color = colors[16],
-        active_bg = colors[4],
-        inactive_bg = colors[17],
-        inactive_fg = colors[2],
-        active_fg = colors[13],
-        padding_left = 0,
-        padding_x = 2,
-        padding_y =5,
-        section_top =10,
-        section_bottom = 20,
-        vspace = 3,
-        panel_width = 220),
     layout.Floating(**layout_theme),
+    # layout.TreeTab(
+    #     font = 'JetBrains Mono',
+    #     fontsize = 13,
+    #     bg_color = colors[16],
+    #     active_bg = colors[4],
+    #     inactive_bg = colors[17],
+    #     inactive_fg = colors[2],
+    #     active_fg = colors[13],
+    #     padding_left = 0,
+    #     padding_x = 2,
+    #     padding_y =5,
+    #     section_top =10,
+    #     section_bottom = 20,
+    #     vspace = 3,
+    #     panel_width = 220),
 ]
 
-
-prompt = "[{0}@{1}]$ ".format(os.environ["USER"], socket.gethostname())
+# prompt = "Run: "
 
 # Default widget settings
 widget_defaults = dict(
-    font = 'JetBrains Mono SemiBold',
-    fontsize = 15,
-    padding = 2,
-    background = colors[16],
+    font='JetBrains Mono SemiBold',
+    fontsize=15,
+    padding=3,
+    background=colors[20],
 )
 extension_defaults = widget_defaults.copy()
 
-PacmanImage = "~/.config/qtile/icons/pacman.png"
-PacmanGhostImg1 = "~/.config/qtile/icons/pacman-ghost1.png"
-PacmanGhostImg2 = "~/.config/qtile/icons/pacman-ghost2.png"
-TuxImg = "/home/crowbar/Downloads/tux-icon.png"
 
-# I have only one screen,
-# so didn't bother to define different functions
+def long_name_parse(text):
+    for string in ["Firefox", "Atom"]:
+        if string in text:
+            text = string
+    return text
+
+
 screens = [
     Screen(
         top=bar.Bar(
             [
                 widget.Spacer(
-                        length = 10,
-                        ),
-                widget.Image(
-                        filename = TuxImg,
-                        scale = "False",
-                        margin_x = None,
-                        margin_y = None),
-                # widget.Spacer(
-                #         length = 10,
-                #         ),
-                # widget.CurrentLayoutIcon(
-                # background = colors[3],
-                # fontsize = 10
-                # ),
+                    length=10,
+                ),
+                widget.CurrentLayoutIcon(
+                background=colors[11],
+                fontsize=10
+                ),
                 widget.Spacer(
-                        length = 5,
-                        ),
-                # widget.CurrentLayout(
-                #         foreground = colors[4],
-                #         fontshadow = colors[17],
-                #         fontsize = 14),
+                    length=5,
+                ),
+                widget.CurrentLayout(
+                    foreground=colors[11],
+                    fontshadow=colors[15],
+                    fontsize=14),
                 widget.Sep(
-                        linewidth = 2,
-                        padding = 3,
-                        foreground = colors[4],
-                        ),
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
                 widget.GroupBox(
-                       fontsize = 25,
-                       margin_y = 5,
-                       margin_x = 1,
-                       padding_y = 5,
-                       padding_x = 3,
-                       borderwidth = 3,
-                       active = colors[2],
-                       inactive = colors[4],
-                       rounded = True,
-                       highlight_color = colors[12],
-                       highlight_method = "line",
-                       this_current_screen_border = colors[17],
-                       this_screen_border = colors[4],
-                       fontshadow = colors[17],
-                        ),
+                    fontsize=25,
+                    margin_y=5,
+                    margin_x=1,
+                    padding_y=5,
+                    padding_x=3,
+                    borderwidth=3,
+                    active=colors[2],
+                    inactive=colors[8],
+                    rounded=True,
+                    highlight_color=colors[11],
+                    highlight_method="line",
+                    this_current_screen_border=colors[11],
+                    this_screen_border=colors[12],
+                    fontshadow=colors[15],
+                ),
+                widget.Spacer(
+                    length=6,
+                ),
                 widget.Sep(
-                        linewidth = 2,
-                        padding = 5,
-                        foreground = colors[4],
-                        ),
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
                 widget.WidgetBox(
-                       text_closed = '', text_open = '',
-                       foreground = colors[18],
-                       #background = colors[16],
-                       fontsize = 25,
-                       fontshadow = colors[15],
-                       padding = 5,
-                       widgets=[
-                widget.Cmus(
-                        play_color = colors[4],
-                        noplay_color = colors[17],
-                        foreground = colors[4],
-                        fontsize = 19,
-                        fontshadow = colors[17],
-                        update_interval = 0.5
+                    text_closed='', text_open='',
+                    foreground=colors[21],
+                    fontsize=25,
+                    fontshadow=colors[15],
+                    padding=5,
+                    widgets=[
+                        widget.Cmus(
+                            play_color=colors[21],
+                            noplay_color=colors[1],
+                            foreground=colors[21],
+                            fontsize=20,
+                            fontshadow=colors[15],
+                            update_interval=1
                         )]),
                 widget.Sep(
-                        linewidth = 2,
-                        padding = 5,
-                        foreground = colors[4],
-                        ),
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
+                # widget.Prompt(
+                #     foreground=colors[4],
+                #     bell_style=None,
+                #     prompt=prompt,
+                #     fontshadow=colors[1],
+                # ),
                 widget.Spacer(
-                        length = 6,
-                        ),
-                widget.Prompt(
-                        fontsize = 15,
-                        foreground = colors[4],
-                        bell_style = None,
-                        prompt = prompt,
-                        fontshadow = colors[16],
-                        ),
+                    length=5,
+                ),
                 widget.WindowName(
-                        fontsize = 0,
-                        # foreground = colors[2],
-                        # fontshadow = colors[16]
-                        ),
-    # System tray begins here
-                widget.TextBox(
-                       text = '',
-                       font = 'Ubuntu Mono',
-                       background = colors[17],
-                       foreground = colors[16],
-                       padding = 0,
-                       fontsize = 37,
-                       #fontshadow = colors[15]
-                       ),
-                widget.Image(
-                        background = colors[17],
-                        filename = PacmanImage,
-                        scale = "False",
-                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('steam')}
-                        ),
+                    foreground=colors[6],
+                    fontshadow=colors[15],
+                    max_chars=0,
+                    parse_text=long_name_parse,
+                ),
+
+                # System tray begins here
+
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
                 widget.Systray(
-                        background = colors[17],
-                        padding = 0,
-                        icon_size = 25
-                        ),
-                widget.Image(
-                        background = colors[17],
-                        filename = PacmanGhostImg1,
-                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('github-desktop')}
-                        ),
-                widget.TextBox(
-                       text = '',
-                       font = 'Ubuntu Mono',
-                       background = colors[3],
-                       foreground = colors[17],
-                       padding = 0,
-                       fontsize = 37,
-                       #fontshadow = colors[15]
-                       ),
-                widget.KeyboardLayout(
-                        foreground = colors[2],
-                        background = colors[3],
-                        padding = 5,
-                        configured_keyboards = ['us','ru'],
-                        fontshadow = colors[15],
-                        ),
-                # widget.KeyboardKbdd(
-                #         foreground = colors[2],
-                #         background = colors[3],
-                #         configured_keyboards = ['us','ru'],
-                #         fontshadow = colors[15],
-                #         padding = 6,
-                #         fontsize = 19
-                #         ),
-                widget.Image(
-                        background = colors[3],
-                        filename = PacmanGhostImg2,
-                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('idea')}
-                        ),
-                widget.TextBox(
-                       text = '',
-                       font = 'Ubuntu Mono',
-                       background = colors[17],
-                       foreground = colors[3],
-                       padding = 0,
-                       fontsize = 37,
-                       #fontshadow = colors[15]
-                       ),
+                    # background=colors[8],
+                    padding=0,
+                    icon_size=24
+                ),
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
+                widget.GenPollText(
+                    foreground=colors[10],
+                    # background=colors[8],
+                    update_interval=1,
+                    func=lambda: subprocess.check_output(home + "/.config/qtile/get_current_layout.sh").decode("utf-8"),
+                    fontsize=17
+                ),
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
                 widget.Clock(
-                        foreground = colors[2],
-                        background = colors[17],
-                        format = "%H:%M  %d.%m.%Y",
-                        fontshadow = colors[15],
-                        padding = 3
-                        ),
-                widget.Image(
-                        background = colors[17],
-                        filename = PacmanGhostImg1,
-                        padding = 3,
-                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('gimp')}
-                        ),
-                widget.Spacer(
-                        background = colors[17],
-                        length = 1,
-                        ),
+                    foreground=colors[18],
+                #    background=colors[17],
+                    format="%H:%M  %d.%m.%Y",
+                    padding=3
+                ),
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
                 widget.TextBox(
-                       text = '',
-                       font = 'Ubuntu Mono',
-                       background = colors[3],
-                       foreground = colors[17],
-                       padding = 0,
-                       fontsize = 37,
-                       #fontshadow = colors[15]
-                       ),
-                widget.Spacer(
-                        background = colors[3],
-                        length = 5),
-                widget.TextBox(
-                        text = '',
-                        #font = "Ubuntu Mono",
-                        background = colors[3],
-                        foreground = colors[2],
-                        padding = 0,
-                        #fontshadow = colors[15],
-                        fontsize = 37),
+                    text='溜',
+            #        background=colors[3],
+                    foreground=colors[14],
+                    padding=2,
+                    fontsize=23),
                 widget.Memory(
-                        foreground = colors[2],
-                        background = colors[3],
-                        measure_mem = 'M',
-                        update_interval = 3.0,
-                        fontshadow = colors[15],
-                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e btop')},
-                        ),
-                widget.Image(
-                        background = colors[3],
-                        filename = PacmanGhostImg2,
-                        ),
-                widget.TextBox(
-                       text = '',
-                       font = "Ubuntu Mono",
-                       background = colors[17],
-                       foreground = colors[3],
-                       padding = 0,
-                       fontsize = 37,
-                       fontshadow = colors[15]
-                       ),
+                    foreground=colors[14],
+            #        background=colors[3],
+                    measure_mem='M',
+                    update_interval=3.0,
+                    fontshadow=colors[15],
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+                ),
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
                 widget.WidgetBox(
-                       text_closed = '理', text_open = 'ﲅ',
-                       foreground = colors[2],
-                       background = colors[17],
-                       fontsize = 30,
-                       fontshadow = colors[15],
-                       padding = 6,
-                       widgets=[
-                widget.TextBox(
-                       text = '  ',
-                       font = "Ubuntu Mono",
-                       background = colors[17],
-                       foreground = colors[2],
-                       fontshadow = colors[15],
-                       fontsize = 18
-                       ),
-                widget.Net(
-                        interface = "wlan0",
-                        format = '{down}↓↑{up}',
-                        foreground = colors[2],
-                        background = colors[17],
-                        padding = 0,
-                        fontshadow = colors[15],
+                    text_closed='', text_open='',
+                    foreground=colors[2],
+            #        background=colors[17],
+                    fontsize=25,
+                    fontshadow=colors[15],
+                    padding=5,
+                    widgets=[
+                            widget.Sep(
+                        linewidth=1,
+                        padding=8,
+                        foreground=colors[11],
                         ),
-                widget.Image(
-                        background = colors[17],
-                        filename = PacmanGhostImg1,
+                            widget.TextBox(
+                        text=' ',
+                        font="Ubuntu Mono",
+                #        background=colors[17],
+                        foreground=colors[4],
+                        fontshadow=colors[15],
+                        fontsize=18
                         ),
-                widget.TextBox(
-                       text = '',
-                       font = "Ubuntu Mono",
-                       background = colors[3],
-                       foreground = colors[17],
-                       padding = 0,
-                       fontsize = 30,
-                       #fontshadow = colors[15]
-                       ),
-                widget.CPU(
-                        foreground = colors[2],
-                        background = colors[3],
-                        format = 'CPU Load {load_percent}',
-                        fontshadow = colors[15],
+                            widget.Net(
+                        interface="wlan0",
+                        format='{down}↓↑{up}',
+                        foreground=colors[4],
+                #        background=colors[17],
+                        padding=3,
+                        fontshadow=colors[15]
                         ),
-                widget.Image(
-                        background = colors[3],
-                        filename = PacmanGhostImg2,
+                            widget.Sep(
+                        linewidth=1,
+                        padding=8,
+                        foreground=colors[11],
                         ),
-                widget.TextBox(
-                       text = '',
-                       font = "Ubuntu Mono",
-                       background = colors[17],
-                       foreground = colors[3],
-                       padding = 0,
-                       fontsize = 30,
-                       #fontshadow = colors[15]
-                       ),
-                ]
-            ),
-        ],
-            size = 23,
-            opacity = 1,
+                            widget.CPU(
+                        foreground=colors[5],
+                    #    background=colors[3],
+                        format='CPU Load: {load_percent}',
+                        fontshadow=colors[15],
+                        ),
+                            widget.Sep(
+                        linewidth=1,
+                        padding=8,
+                        foreground=colors[11],
+                        ),
+                            widget.TextBox(
+                        text='ﰇ',
+                        font="Ubuntu Mono",
+                    #    background=colors[17],
+                        foreground=colors[10],
+                        fontshadow=colors[15],
+                        fontsize=24,
+                        padding=3,
+                        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('reboot')},
+                        ),
+                            widget.Spacer(
+                    #    background=colors[17],
+                        length=10),
+                            widget.TextBox(
+                        text='⏻',
+                        font="Ubuntu Mono",
+                    #    background=colors[17],
+                        foreground=colors[9],
+                        fontshadow=colors[15],
+                        fontsize=24,
+                        padding=2,
+                        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('shutdown now')},
+                        ),
+                            widget.Spacer(
+                        length=4),
+                    ]
+                ),
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
+                widget.Spacer(
+                    length=4),
+            ],
+            size=20,
+            opacity=1,
+            background=colors[20],
+            margin=1
         ),
     ),
 ]
-
 
 # Drag floating layouts.
 mouse = [
