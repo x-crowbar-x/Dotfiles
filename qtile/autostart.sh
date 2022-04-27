@@ -4,7 +4,7 @@
 pamixer --set-volume 0
 picom --experimental-backend &
 nm-applet &
-cbatticon &
+# cbatticon &
 blueman-applet &
 mpv /usr/share/mathjax2/extensions/a11y/invalid_keypress.mp3
 volumeicon &

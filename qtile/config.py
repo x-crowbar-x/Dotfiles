@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 # import re
 # import socket
@@ -183,13 +182,13 @@ colors = [["#282a36", "#282a36"],  # 0
           ["#164789", "#164789"],  # 17
           ["#7AEEAA", "#7AEEAA"],  # 18
           ["#f28fad", "#ba8baf"],  # 19
-          ["#00000000", "#00000000"], # 20
-          ["#aa7bed", "#aa7bed"]] # 21
+          ["#00000000", "#00000000"],  # 20
+          ["#aa7bed", "#aa7bed"]]  # 21
 
 layout_theme = {"border_width": 3,
                 "margin": 5,
                 "single_margin": 0,
-                "single_border_width": 1,
+                "single_border_width": 0,
                 "border_focus": colors[8],
                 "border_normal": colors[15]
                 }
@@ -229,7 +228,7 @@ layouts = [
 # Default widget settings
 widget_defaults = dict(
     font='JetBrains Mono SemiBold',
-    fontsize=15,
+    fontsize=16,
     padding=3,
     background=colors[20],
 )
@@ -237,10 +236,65 @@ extension_defaults = widget_defaults.copy()
 
 
 def long_name_parse(text):
-    for string in ["Firefox", "Atom"]:
+    for string in ["Firefox", "Atom", " LibreOffice", "Telegram", "E-book viewer"]:
         if string in text:
             text = string
     return text
+
+
+
+def bat_charge():
+    bat_state = subprocess.check_output(home + '/.config/qtile/bat_state.sh').decode("utf-8").replace('\n', '')
+    bat_capacity = subprocess.check_output(home + '/.config/qtile/bat_capacity.sh').decode("utf-8").replace('\n', '')
+    integer = int(bat_capacity)
+    if (bat_state == 'Charging') and (integer <= 5):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 10):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 20):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 30):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 40):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 50):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 60):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 70):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 80):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 90):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 100):
+        return ' {}% '.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 5):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 10):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 20):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 30):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 40):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 50):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 60):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 70):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 80):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 90):
+        return ' {}%'.format(integer)
+    elif (bat_state == 'Discharging') and (integer <= 100):
+        return ' {}%'.format(integer)
+    elif bat_state == 'Full':
+        return ' {}%'.format(integer)
+    elif bat_state == 'Unknown':
+        return ' {}%'.format(integer)
 
 
 screens = [
@@ -251,8 +305,8 @@ screens = [
                     length=10,
                 ),
                 widget.CurrentLayoutIcon(
-                background=colors[11],
-                fontsize=10
+                    background=colors[11],
+                    fontsize=10
                 ),
                 widget.Spacer(
                     length=5,
@@ -310,12 +364,6 @@ screens = [
                     padding=6,
                     foreground=colors[11],
                 ),
-                # widget.Prompt(
-                #     foreground=colors[4],
-                #     bell_style=None,
-                #     prompt=prompt,
-                #     fontshadow=colors[1],
-                # ),
                 widget.Spacer(
                     length=5,
                 ),
@@ -325,14 +373,10 @@ screens = [
                     max_chars=0,
                     parse_text=long_name_parse,
                 ),
+                ###########################
+                # System tray begins here #
+                ###########################
 
-                # System tray begins here
-
-                widget.Sep(
-                    linewidth=1,
-                    padding=6,
-                    foreground=colors[11],
-                ),
                 widget.Systray(
                     # background=colors[8],
                     padding=0,
@@ -344,8 +388,18 @@ screens = [
                     foreground=colors[11],
                 ),
                 widget.GenPollText(
+                    foreground=colors[4],
+                    update_interval=2,
+                    func=bat_charge,
+                    fontsize=16
+                ),
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
+                widget.GenPollText(
                     foreground=colors[10],
-                    # background=colors[8],
                     update_interval=1,
                     func=lambda: subprocess.check_output(home + "/.config/qtile/get_current_layout.sh").decode("utf-8"),
                     fontsize=17
@@ -357,7 +411,7 @@ screens = [
                 ),
                 widget.Clock(
                     foreground=colors[18],
-                #    background=colors[17],
+                    #    background=colors[17],
                     format="%H:%M  %d.%m.%Y",
                     padding=3
                 ),
@@ -368,13 +422,13 @@ screens = [
                 ),
                 widget.TextBox(
                     text='溜',
-            #        background=colors[3],
+                    #        background=colors[3],
                     foreground=colors[14],
                     padding=2,
                     fontsize=23),
                 widget.Memory(
                     foreground=colors[14],
-            #        background=colors[3],
+                    #        background=colors[3],
                     measure_mem='M',
                     update_interval=3.0,
                     fontshadow=colors[15],
@@ -388,73 +442,73 @@ screens = [
                 widget.WidgetBox(
                     text_closed='', text_open='',
                     foreground=colors[2],
-            #        background=colors[17],
+                    #        background=colors[17],
                     fontsize=25,
                     fontshadow=colors[15],
                     padding=5,
                     widgets=[
-                            widget.Sep(
-                        linewidth=1,
-                        padding=8,
-                        foreground=colors[11],
+                        widget.Sep(
+                            linewidth=1,
+                            padding=8,
+                            foreground=colors[11],
                         ),
-                            widget.TextBox(
-                        text=' ',
-                        font="Ubuntu Mono",
-                #        background=colors[17],
-                        foreground=colors[4],
-                        fontshadow=colors[15],
-                        fontsize=18
+                        widget.TextBox(
+                            text=' ',
+                            font="Ubuntu Mono",
+                            #        background=colors[17],
+                            foreground=colors[4],
+                            fontshadow=colors[15],
+                            fontsize=18
                         ),
-                            widget.Net(
-                        interface="wlan0",
-                        format='{down}↓↑{up}',
-                        foreground=colors[4],
-                #        background=colors[17],
-                        padding=3,
-                        fontshadow=colors[15]
+                        widget.Net(
+                            interface="wlan0",
+                            format='{down}↓↑{up}',
+                            foreground=colors[4],
+                            #        background=colors[17],
+                            padding=3,
+                            fontshadow=colors[15]
                         ),
-                            widget.Sep(
-                        linewidth=1,
-                        padding=8,
-                        foreground=colors[11],
+                        widget.Sep(
+                            linewidth=1,
+                            padding=8,
+                            foreground=colors[11],
                         ),
-                            widget.CPU(
-                        foreground=colors[5],
-                    #    background=colors[3],
-                        format='CPU Load: {load_percent}',
-                        fontshadow=colors[15],
+                        widget.CPU(
+                            foreground=colors[5],
+                            #    background=colors[3],
+                            format='CPU Load: {load_percent}',
+                            fontshadow=colors[15],
                         ),
-                            widget.Sep(
-                        linewidth=1,
-                        padding=8,
-                        foreground=colors[11],
+                        widget.Sep(
+                            linewidth=1,
+                            padding=8,
+                            foreground=colors[11],
                         ),
-                            widget.TextBox(
-                        text='ﰇ',
-                        font="Ubuntu Mono",
-                    #    background=colors[17],
-                        foreground=colors[10],
-                        fontshadow=colors[15],
-                        fontsize=24,
-                        padding=3,
-                        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('reboot')},
+                        widget.TextBox(
+                            text='ﰇ',
+                            font="Ubuntu Mono",
+                            #    background=colors[17],
+                            foreground=colors[10],
+                            fontshadow=colors[15],
+                            fontsize=24,
+                            padding=3,
+                            mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('reboot')},
                         ),
-                            widget.Spacer(
-                    #    background=colors[17],
-                        length=10),
-                            widget.TextBox(
-                        text='⏻',
-                        font="Ubuntu Mono",
-                    #    background=colors[17],
-                        foreground=colors[9],
-                        fontshadow=colors[15],
-                        fontsize=24,
-                        padding=2,
-                        mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('shutdown now')},
+                        widget.Spacer(
+                            #    background=colors[17],
+                            length=10),
+                        widget.TextBox(
+                            text='⏻',
+                            font="Ubuntu Mono",
+                            #    background=colors[17],
+                            foreground=colors[9],
+                            fontshadow=colors[15],
+                            fontsize=24,
+                            padding=2,
+                            mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('shutdown now')},
                         ),
-                            widget.Spacer(
-                        length=4),
+                        widget.Spacer(
+                            length=4),
                     ]
                 ),
                 widget.Sep(
@@ -499,6 +553,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='splash'),
     Match(title='Confirmation'),
     Match(title='Friends List'),
+    Match(title='Migrating Plugins'),
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
