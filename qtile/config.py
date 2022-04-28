@@ -23,6 +23,7 @@ home = os.path.expanduser('~')
 @hook.subscribe.startup_once
 def autostart():
     subprocess.Popen([home + '/.config/qtile/autostart.sh'])
+    subprocess.Popen([home + '/.config/qtile/wallpaper-change.sh'])
 
 
 keys = [
@@ -187,8 +188,8 @@ colors = [["#282a36", "#282a36"],  # 0
 
 layout_theme = {"border_width": 3,
                 "margin": 5,
-                "single_margin": 0,
-                "single_border_width": 0,
+                "single_margin": 1,
+                "single_border_width": 1,
                 "border_focus": colors[8],
                 "border_normal": colors[15]
                 }
@@ -242,7 +243,6 @@ def long_name_parse(text):
     return text
 
 
-
 def bat_charge():
     bat_state = subprocess.check_output(home + '/.config/qtile/bat_state.sh').decode("utf-8").replace('\n', '')
     bat_capacity = subprocess.check_output(home + '/.config/qtile/bat_capacity.sh').decode("utf-8").replace('\n', '')
@@ -267,8 +267,8 @@ def bat_charge():
         return ' {}% '.format(integer)
     elif (bat_state == 'Charging') and (integer <= 90):
         return ' {}% '.format(integer)
-    elif (bat_state == 'Charging') and (integer <= 100):
-        return ' {}% '.format(integer)
+    elif (bat_state == 'Charging') and (integer <= 99):
+            return ' {}% '.format(integer)
     elif (bat_state == 'Discharging') and (integer <= 5):
         return ' {}%'.format(integer)
     elif (bat_state == 'Discharging') and (integer <= 10):
