@@ -17,6 +17,7 @@ terminal = "alacritty"
 myBrowser = "firefox"
 myFileManager = "thunar"
 myOfficeSuite = "libreoffice"
+myTextEditor = "atom"
 home = os.path.expanduser('~')
 
 
@@ -30,13 +31,18 @@ keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
 
-    Key([mod], "q", lazy.hide_show_bar(), desc="Toggles between hide/show the bar"),
+    Key([mod], "q", lazy.hide_show_bar(),
+        desc="Toggles between hide/show the bar"),
 
     # Switch between windows
-    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
-    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([mod], "h", lazy.layout.left(),
+        desc="Move focus to left"),
+    Key([mod], "l", lazy.layout.right(),
+        desc="Move focus to right"),
+    Key([mod], "j", lazy.layout.down(),
+        desc="Move focus down"),
+    Key([mod], "k", lazy.layout.up(),
+        desc="Move focus up"),
     Key([mod], "m", lazy.layout.next(),
         desc="Move window focus to other window"),
 
@@ -47,15 +53,13 @@ keys = [
         desc="Thunar"),
     Key([mod], "o", lazy.spawn(myOfficeSuite),
         desc="Libreoffice"),
-    Key([mod], "a", lazy.spawn("atom"),
-        desc="Launch Atom text editor"),
+    Key([mod], "a", lazy.spawn(myTextEditor),
+        desc="Launch text editor"),
     Key([mod], "x", lazy.spawn(terminal),
         desc="Launch terminal"),
-    Key([mod2, "shift"], "f", lazy.spawn("catfish"),
-        desc="Search for files with catfish"),
 
     Key([mod], "c", lazy.spawn("atom .config/qtile/config.py"),
-        desc="Open this Qtile confing"),
+        desc="Open this Qtile confing in Atom"),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -65,7 +69,8 @@ keys = [
         desc="Move window to the right"),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(),
         desc="Move window down"),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up(),
+        desc="Move window up"),
 
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
@@ -93,16 +98,17 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawn("dmenu_run -p 'Run: '"),
         desc="Run Launcher"),
+
     # Brightness control
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +5%")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%- ")),
 
-    # Audio controls
-
+    # Audio controls (commented out because I use volemeicon to controll the volume)
     # Key([], "XF86AudioMute", lazy.spawn("pamixer --toggle-mute")),
     # Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer --decrease 2")),
     # Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer --increase 2")),
-    Key([], "XF86AudioMicMute", lazy.spawn("pamixer --source 46 -t")),
+    Key([], "XF86AudioMicMute", lazy.spawn("pamixer --source 55 -t")),
+
     # Music control buttons
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
     Key([], "XF86AudioNext", lazy.spawn("playerctl next")),
@@ -236,6 +242,8 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 
+# checks if these strings are in the names of windows
+# and shortens them, so that they don't take all the space in the bar
 def long_name_parse(text):
     for string in ["Firefox", "Atom", " LibreOffice", "Telegram", "E-book viewer"]:
         if string in text:
@@ -243,6 +251,7 @@ def long_name_parse(text):
     return text
 
 
+# checks and returns battery capacity and state. adds a corresponding icon(s)
 def bat_charge():
     bat_state = subprocess.check_output(home + '/.config/qtile/bat_state.sh').decode("utf-8").replace('\n', '')
     bat_capacity = subprocess.check_output(home + '/.config/qtile/bat_capacity.sh').decode("utf-8").replace('\n', '')
@@ -294,7 +303,16 @@ def bat_charge():
     elif bat_state == 'Full':
         return ' {}%'.format(integer)
     elif bat_state == 'Unknown':
-        return ' {}%'.format(integer)
+        return ' {}%'.format(integer)
+
+
+def arch_updates():
+    updates_count = subprocess.check_output(home + '/.config/qtile/arch_updates_count.sh').decode("utf-8")
+    integer = int(updates_count)
+    if integer > 0:
+        return 'upd: {}'.format(integer)
+    else:
+        return 'Up to date!'
 
 
 screens = [
@@ -373,14 +391,40 @@ screens = [
                     max_chars=0,
                     parse_text=long_name_parse,
                 ),
+                # widget.WindowTabs(
+                #     foreground=colors[6],
+                #     fontshadow=colors[15],
+                #     max_chars=0,
+                #     parse_text=long_name_parse,
+                # ),
+
                 ###########################
                 # System tray begins here #
                 ###########################
 
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
                 widget.Systray(
-                    # background=colors[8],
                     padding=0,
                     icon_size=24
+                ),
+
+                widget.Sep(
+                    linewidth=1,
+                    padding=6,
+                    foreground=colors[11],
+                ),
+                widget.GenPollText(
+                    foreground=colors[11],
+                    update_interval=7200,
+                    padding=1,
+                    func=arch_updates,
+                    fontshadow=colors[15],
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay')},
+                    fontsize=15
                 ),
                 widget.Sep(
                     linewidth=1,
@@ -411,7 +455,6 @@ screens = [
                 ),
                 widget.Clock(
                     foreground=colors[18],
-                    #    background=colors[17],
                     format="%H:%M  %d.%m.%Y",
                     padding=3
                 ),
@@ -422,13 +465,11 @@ screens = [
                 ),
                 widget.TextBox(
                     text='溜',
-                    #        background=colors[3],
                     foreground=colors[14],
                     padding=2,
                     fontsize=23),
                 widget.Memory(
                     foreground=colors[14],
-                    #        background=colors[3],
                     measure_mem='M',
                     update_interval=3.0,
                     fontshadow=colors[15],
@@ -442,7 +483,6 @@ screens = [
                 widget.WidgetBox(
                     text_closed='', text_open='',
                     foreground=colors[2],
-                    #        background=colors[17],
                     fontsize=25,
                     fontshadow=colors[15],
                     padding=5,
@@ -455,7 +495,6 @@ screens = [
                         widget.TextBox(
                             text=' ',
                             font="Ubuntu Mono",
-                            #        background=colors[17],
                             foreground=colors[4],
                             fontshadow=colors[15],
                             fontsize=18
@@ -464,7 +503,6 @@ screens = [
                             interface="wlan0",
                             format='{down}↓↑{up}',
                             foreground=colors[4],
-                            #        background=colors[17],
                             padding=3,
                             fontshadow=colors[15]
                         ),
@@ -475,7 +513,6 @@ screens = [
                         ),
                         widget.CPU(
                             foreground=colors[5],
-                            #    background=colors[3],
                             format='CPU Load: {load_percent}',
                             fontshadow=colors[15],
                         ),
@@ -487,7 +524,6 @@ screens = [
                         widget.TextBox(
                             text='ﰇ',
                             font="Ubuntu Mono",
-                            #    background=colors[17],
                             foreground=colors[10],
                             fontshadow=colors[15],
                             fontsize=24,
@@ -495,12 +531,10 @@ screens = [
                             mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('reboot')},
                         ),
                         widget.Spacer(
-                            #    background=colors[17],
                             length=10),
                         widget.TextBox(
                             text='⏻',
                             font="Ubuntu Mono",
-                            #    background=colors[17],
                             foreground=colors[9],
                             fontshadow=colors[15],
                             fontsize=24,
