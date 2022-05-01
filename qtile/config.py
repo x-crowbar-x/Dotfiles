@@ -80,8 +80,10 @@ keys = [
         desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(),
         desc="Grow window down"),
-    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    Key([mod, "control"], "k", lazy.layout.grow_up(),
+        desc="Grow window up"),
+    Key([mod], "n", lazy.layout.normalize(),
+        desc="Reset all window sizes"),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -91,12 +93,16 @@ keys = [
         desc="Toggle between split and unsplit sides of stack"),
 
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "Tab", lazy.next_layout(),
+        desc="Toggle between layouts"),
+    Key([mod], "w", lazy.window.kill(),
+        desc="Kill focused window"),
 
-    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawn("dmenu_run -p 'Run: '"),
+    Key([mod, "control"], "r", lazy.reload_config(),
+        desc="Reload the config"),
+    Key([mod, "control"], "q", lazy.shutdown(),
+        desc="Shutdown Qtile"),
+    Key([mod], "r", lazy.spawn("rofi -show run"),
         desc="Run Launcher"),
 
     # Brightness control
@@ -132,6 +138,7 @@ keys = [
         desc='normalize window size ratios'),
     Key([mod], "t", lazy.window.toggle_floating(),
         desc='Toggle floating layout'),
+    Key([mod, "control"], "z", lazy.spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" -sb "#ae05fc" -sf "#d8d8d8" -nb "#414458" -nf "#d8d8d8"'))
 ]
 
 groups = [Group(i) for i in [
@@ -173,28 +180,28 @@ colors = [["#282a36", "#282a36"],  # 0
           ["#44475a", "#44475a"],  # 1
           ["#d8d8d8", "#d8d8d8"],  # 2
           ["#3080b1", "#3080b1"],  # 3
-          ["#40abbf", "#89f2ff"],  # 4
-          ["#c3e88d", "#a1b56c"],  # 5
+          ["#7aa2f7", "#7aa2f7"],  # 4
+          ["#56b6c2", "#3080b1"],  # 5
           ["#ffe585", "#ffe585"],  # 6
-          ["#f5c2e7", "#f5c2e7"],  # 7
+          ["#56b6c2", "#7aa2f7"],  # 7
           ["#d6acff", "#aa7bed"],  # 8
-          ["#ab4642", "#ab4642"],  # 9
-          ["#f7ca88", "#f7ca88"],  # 10
+          ["#f25287", "#f25287"],  # 9
+          ["#d19a66", "#d19a66"],  # 10
           ["#ae05fc", "#aa7bed"],  # 11
           ["#0b4d93", "#0b4d93"],  # 12
-          ["#ff6e6e", "#ff6e6e"],  # 13
+          ["#e06c75", "#e06c75"],  # 13
           ["#82aaff", "#82aaff"],  # 14
           ["#414458", "#575b75"],  # 15
           ["#172b60", "#172b60"],  # 16
           ["#164789", "#164789"],  # 17
-          ["#7AEEAA", "#7AEEAA"],  # 18
-          ["#f28fad", "#ba8baf"],  # 19
+          ["#7AaE4A", "#7AaE4A"],  # 18
+          ["#90ce6a", "#90ce6a"],  # 19
           ["#00000000", "#00000000"],  # 20
-          ["#aa7bed", "#aa7bed"]]  # 21
+          ["#56b6c2", "#56b6c2"]]  # 21
 
-layout_theme = {"border_width": 3,
-                "margin": 5,
-                "single_margin": 1,
+layout_theme = {"border_width": 2,
+                "margin": 10,
+                "single_margin": 0,
                 "single_border_width": 1,
                 "border_focus": colors[8],
                 "border_normal": colors[15]
@@ -310,7 +317,7 @@ def arch_updates():
     updates_count = subprocess.check_output(home + '/.config/qtile/arch_updates_count.sh').decode("utf-8")
     integer = int(updates_count)
     if integer > 0:
-        return 'upd: {}'.format(integer)
+        return ' upd: {}'.format(integer)
     else:
         return 'Up to date!'
 
@@ -362,26 +369,6 @@ screens = [
                     padding=6,
                     foreground=colors[11],
                 ),
-                widget.WidgetBox(
-                    text_closed='', text_open='',
-                    foreground=colors[21],
-                    fontsize=25,
-                    fontshadow=colors[15],
-                    padding=5,
-                    widgets=[
-                        widget.Cmus(
-                            play_color=colors[21],
-                            noplay_color=colors[1],
-                            foreground=colors[21],
-                            fontsize=20,
-                            fontshadow=colors[15],
-                            update_interval=1
-                        )]),
-                widget.Sep(
-                    linewidth=1,
-                    padding=6,
-                    foreground=colors[11],
-                ),
                 widget.Spacer(
                     length=5,
                 ),
@@ -391,12 +378,16 @@ screens = [
                     max_chars=0,
                     parse_text=long_name_parse,
                 ),
-                # widget.WindowTabs(
-                #     foreground=colors[6],
-                #     fontshadow=colors[15],
-                #     max_chars=0,
-                #     parse_text=long_name_parse,
-                # ),
+                widget.DF(
+                    foreground=colors[2],
+                    fontshadow=colors[0],
+                    update_interval=1000,
+                    warn_space=4,
+                    measure='G',
+                    warn_color='ff0000',
+                    fontsize=15,
+                    format='(root{p} {uf}{m}|{r:.0f}%)'
+                ),
 
                 ###########################
                 # System tray begins here #
@@ -418,7 +409,7 @@ screens = [
                     foreground=colors[11],
                 ),
                 widget.GenPollText(
-                    foreground=colors[11],
+                    foreground=colors[7],
                     update_interval=7200,
                     padding=1,
                     func=arch_updates,
@@ -432,7 +423,7 @@ screens = [
                     foreground=colors[11],
                 ),
                 widget.GenPollText(
-                    foreground=colors[4],
+                    foreground=colors[6],
                     update_interval=2,
                     func=bat_charge,
                     fontsize=16
@@ -443,7 +434,7 @@ screens = [
                     foreground=colors[11],
                 ),
                 widget.GenPollText(
-                    foreground=colors[10],
+                    foreground=colors[19],
                     update_interval=1,
                     func=lambda: subprocess.check_output(home + "/.config/qtile/get_current_layout.sh").decode("utf-8"),
                     fontsize=17
@@ -454,7 +445,7 @@ screens = [
                     foreground=colors[11],
                 ),
                 widget.Clock(
-                    foreground=colors[18],
+                    foreground=colors[9],
                     format="%H:%M  %d.%m.%Y",
                     padding=3
                 ),
@@ -465,13 +456,13 @@ screens = [
                 ),
                 widget.TextBox(
                     text='溜',
-                    foreground=colors[14],
+                    foreground=colors[10],
                     padding=2,
                     fontsize=23),
                 widget.Memory(
-                    foreground=colors[14],
+                    foreground=colors[10],
                     measure_mem='M',
-                    update_interval=3.0,
+                    update_interval=5,
                     fontshadow=colors[15],
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
                 ),
@@ -482,10 +473,10 @@ screens = [
                 ),
                 widget.WidgetBox(
                     text_closed='', text_open='',
-                    foreground=colors[2],
+                    foreground=colors[19],
                     fontsize=25,
                     fontshadow=colors[15],
-                    padding=5,
+                    padding=9,
                     widgets=[
                         widget.Sep(
                             linewidth=1,
@@ -495,14 +486,14 @@ screens = [
                         widget.TextBox(
                             text=' ',
                             font="Ubuntu Mono",
-                            foreground=colors[4],
+                            foreground=colors[8],
                             fontshadow=colors[15],
                             fontsize=18
                         ),
                         widget.Net(
                             interface="wlan0",
                             format='{down}↓↑{up}',
-                            foreground=colors[4],
+                            foreground=colors[8],
                             padding=3,
                             fontshadow=colors[15]
                         ),
@@ -512,39 +503,34 @@ screens = [
                             foreground=colors[11],
                         ),
                         widget.CPU(
-                            foreground=colors[5],
+                            foreground=colors[19],
                             format='CPU Load: {load_percent}',
                             fontshadow=colors[15],
-                        ),
-                        widget.Sep(
-                            linewidth=1,
-                            padding=8,
-                            foreground=colors[11],
-                        ),
-                        widget.TextBox(
-                            text='ﰇ',
-                            font="Ubuntu Mono",
-                            foreground=colors[10],
-                            fontshadow=colors[15],
-                            fontsize=24,
-                            padding=3,
-                            mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('reboot')},
-                        ),
-                        widget.Spacer(
-                            length=10),
-                        widget.TextBox(
-                            text='⏻',
-                            font="Ubuntu Mono",
-                            foreground=colors[9],
-                            fontshadow=colors[15],
-                            fontsize=24,
-                            padding=2,
-                            mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('shutdown now')},
                         ),
                         widget.Spacer(
                             length=4),
                     ]
                 ),
+                widget.Sep(
+                    linewidth=1,
+                    padding=8,
+                    foreground=colors[11],
+                ),
+                widget.Spacer(
+                    length=4),
+                widget.Spacer(
+                    length=10),
+                widget.TextBox(
+                    text='⏻',
+                    font="Ubuntu Mono",
+                    foreground=colors[9],
+                    fontshadow=colors[15],
+                    fontsize=22,
+                    padding=2,
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" -sb "#ae05fc" -sf "#d8d8d8" -nb "#414458" -nf "#d8d8d8"')},
+                ),
+                widget.Spacer(
+                    length=4),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
