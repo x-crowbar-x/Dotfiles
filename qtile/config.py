@@ -1,12 +1,9 @@
 import os
-# import re
-# import socket
 import subprocess
 from libqtile import layout, bar, widget, hook, qtile
 from typing import List  # noqa: F401
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
-from libqtile.widget import Spacer
 
 mod = "mod4"
 mod1 = "alt"
@@ -24,7 +21,7 @@ home = os.path.expanduser('~')
 @hook.subscribe.startup_once
 def autostart():
     subprocess.Popen([home + '/.config/qtile/autostart.sh'])
-    subprocess.Popen([home + '/.config/qtile/wallpaper-change.sh'])
+    subprocess.Popen([home + '/bin/wallpaper-change'])
 
 
 keys = [
@@ -109,11 +106,11 @@ keys = [
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +5%")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%- ")),
 
-    # Audio controls (commented out because I use volemeicon to controll the volume)
-    # Key([], "XF86AudioMute", lazy.spawn("pamixer --toggle-mute")),
-    # Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer --decrease 2")),
-    # Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer --increase 2")),
-    Key([], "XF86AudioMicMute", lazy.spawn("pamixer --source 55 -t")),
+    # Audio controls (I use volumeicon to controll the volume)
+    # Key([], "XF86AudioMute", lazy.spawn("")),
+    # Key([], "XF86AudioLowerVolume", lazy.spawn("")),
+    # Key([], "XF86AudioRaiseVolume", lazy.spawn("")),
+    Key([], "XF86AudioMicMute", lazy.spawn("pactl set-source-mute 1 toggle")),
 
     # Music control buttons
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
@@ -138,7 +135,8 @@ keys = [
         desc='normalize window size ratios'),
     Key([mod], "t", lazy.window.toggle_floating(),
         desc='Toggle floating layout'),
-    Key([mod, "control"], "z", lazy.spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" -sb "#ae05fc" -sf "#d8d8d8" -nb "#414458" -nf "#d8d8d8"'))
+    Key([mod, "control"], "z", lazy.spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" -sb "#ae05fc" -sf "#d8d8d8" '
+                                          '-nb "#414458" -nf "#d8d8d8"'))
 ]
 
 groups = [Group(i) for i in [
@@ -200,7 +198,7 @@ colors = [["#282a36", "#282a36"],  # 0
           ["#56b6c2", "#56b6c2"]]  # 21
 
 layout_theme = {"border_width": 2,
-                "margin": 10,
+                "margin": 6,
                 "single_margin": 0,
                 "single_border_width": 1,
                 "border_focus": colors[8],
@@ -252,8 +250,12 @@ extension_defaults = widget_defaults.copy()
 # checks if these strings are in the names of windows
 # and shortens them, so that they don't take all the space in the bar
 def long_name_parse(text):
-    for string in ["Firefox", "Atom", " LibreOffice", "Telegram", "E-book viewer"]:
-        if string in text:
+    mpv = " - mpv"
+    for string in ["Firefox", "Atom", "Thonny",
+                   "Telegram", "E-book viewer", mpv]:
+        if mpv in text:
+            text = mpv.replace(' - mpv', 'Media Player')
+        elif string in text:
             text = string
     return text
 
@@ -284,7 +286,7 @@ def bat_charge():
     elif (bat_state == 'Charging') and (integer <= 90):
         return ' {}% '.format(integer)
     elif (bat_state == 'Charging') and (integer <= 99):
-            return ' {}% '.format(integer)
+        return ' {}% '.format(integer)
     elif (bat_state == 'Discharging') and (integer <= 5):
         return ' {}%'.format(integer)
     elif (bat_state == 'Discharging') and (integer <= 10):
@@ -381,8 +383,8 @@ screens = [
                 widget.DF(
                     foreground=colors[2],
                     fontshadow=colors[0],
-                    update_interval=1000,
-                    warn_space=4,
+                    update_interval=5000,
+                    warn_space=5,
                     measure='G',
                     warn_color='ff0000',
                     fontsize=15,
@@ -399,10 +401,9 @@ screens = [
                     foreground=colors[11],
                 ),
                 widget.Systray(
-                    padding=0,
-                    icon_size=24
+                    padding=3,
+                    icon_size=20
                 ),
-
                 widget.Sep(
                     linewidth=1,
                     padding=6,
@@ -446,7 +447,7 @@ screens = [
                 ),
                 widget.Clock(
                     foreground=colors[9],
-                    format="%H:%M  %d.%m.%Y",
+                    format="%R:%S  %a.%d.%m.%Y",
                     padding=3
                 ),
                 widget.Sep(
@@ -472,9 +473,9 @@ screens = [
                     foreground=colors[11],
                 ),
                 widget.WidgetBox(
-                    text_closed='', text_open='',
+                    text_closed='漣', text_open='煉',
                     foreground=colors[19],
-                    fontsize=25,
+                    fontsize=27,
                     fontshadow=colors[15],
                     padding=9,
                     widgets=[
@@ -518,8 +519,6 @@ screens = [
                 ),
                 widget.Spacer(
                     length=4),
-                widget.Spacer(
-                    length=10),
                 widget.TextBox(
                     text='⏻',
                     font="Ubuntu Mono",
@@ -527,7 +526,9 @@ screens = [
                     fontshadow=colors[15],
                     fontsize=22,
                     padding=2,
-                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" -sb "#ae05fc" -sf "#d8d8d8" -nb "#414458" -nf "#d8d8d8"')},
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" '
+                                                                        '-sb "#ae05fc" -sf "#d8d8d8" -nb "#414458" '
+                                                                        '-nf "#d8d8d8"')},
                 ),
                 widget.Spacer(
                     length=4),

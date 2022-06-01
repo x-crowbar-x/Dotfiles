@@ -1,3 +1,3 @@
 #!/bin/bash
 
-xkblayout-state print "%s"
+echo -n "$(xkblayout)"
