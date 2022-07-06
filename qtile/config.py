@@ -1,9 +1,10 @@
 import os
 import subprocess
 from libqtile import layout, bar, widget, hook, qtile
-from typing import List  # noqa: F401
+from typing import List
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
+
 
 mod = "mod4"
 mod1 = "alt"
@@ -14,20 +15,23 @@ terminal = "alacritty"
 myBrowser = "firefox"
 myFileManager = "thunar"
 myOfficeSuite = "libreoffice"
-myTextEditor = "atom"
+myTextEditor = "code"
 home = os.path.expanduser('~')
+wallpaper = home + '/Pictures/solar-system-wallpaper-19201080.jpg'
 
 
 @hook.subscribe.startup_once
 def autostart():
     subprocess.Popen([home + '/.config/qtile/autostart.sh'])
-    subprocess.Popen([home + '/bin/wallpaper-change'])
+    subprocess.Popen([home + '/.config/qtile/wallpaper.sh', wallpaper])
 
 
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-
+    
+    Key([], "XF86PowerOff", lazy.spawn("python " + home + "/bin/pybye"),
+        desc="Run Log out script"),
     Key([mod], "q", lazy.hide_show_bar(),
         desc="Toggles between hide/show the bar"),
 
@@ -55,8 +59,8 @@ keys = [
     Key([mod], "x", lazy.spawn(terminal),
         desc="Launch terminal"),
 
-    Key([mod], "c", lazy.spawn("atom .config/qtile/config.py"),
-        desc="Open this Qtile confing in Atom"),
+    Key([mod], "c", lazy.spawn(f"{myTextEditor} {home}/.config/qtile/"),
+        desc="Open this Qtile confing in text editor "),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -135,8 +139,7 @@ keys = [
         desc='normalize window size ratios'),
     Key([mod], "t", lazy.window.toggle_floating(),
         desc='Toggle floating layout'),
-    Key([mod, "control"], "z", lazy.spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" -sb "#ae05fc" -sf "#d8d8d8" '
-                                          '-nb "#414458" -nf "#d8d8d8"'))
+    Key([mod], "z", lazy.spawn(home + '/bin/pybye'))
 ]
 
 groups = [Group(i) for i in [
@@ -152,56 +155,35 @@ for i, group in enumerate(groups):
         Key([mod, "shift"], actual_key, lazy.window.togroup(group.name))
     ])
 
-# groups = [Group("1", layout='monadtall'),
-#           Group("2", layout='monadtall'),
-#           Group("3", layout='monadtall'),
-#           Group("4", layout='monadtall'),
-#           Group("5", layout='floating')]
-#
-#
-# for i in groups:
-#     keys.extend([
-#         # mod1 + letter of group = switch to group
-#         Key([mod], i.name, lazy.group[i.name].toscreen(),
-#             desc="Switch to group {}".format(i.name)),
-#
-#         # mod1 + shift + letter of group = switch to & move focused window to group
-#         Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
-#             desc="Switch to & move focused window to group {}".format(i.name)),
-#         # Or, use below if you prefer not to switch to that group.
-#         ## mod1 + shift + letter of group = move focused window to group
-#         # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-#         #     desc="move focused window to group {}".format(i.name)),
-#     ])
-
 colors = [["#282a36", "#282a36"],  # 0
           ["#44475a", "#44475a"],  # 1
-          ["#d8d8d8", "#d8d8d8"],  # 2
+          ["#ffffff", "#ffffff"],  # 2
           ["#3080b1", "#3080b1"],  # 3
-          ["#7aa2f7", "#7aa2f7"],  # 4
-          ["#56b6c2", "#3080b1"],  # 5
-          ["#ffe585", "#ffe585"],  # 6
-          ["#56b6c2", "#7aa2f7"],  # 7
-          ["#d6acff", "#aa7bed"],  # 8
-          ["#f25287", "#f25287"],  # 9
-          ["#d19a66", "#d19a66"],  # 10
+          ["#84DEEF", "#84DEEF"],  # 4
+          ["#ffbe00", "#ffbe00"],  # 5
+          ["#dadc5b", "#dadc5b"],  # 6
+          ["#30bfc4", "#30bfc4"],  # 7
+          ["#f56038", "#FF0000"],  # 8
+          ["#FF0000", "#FF0000"],  # 9
+          ["#f56038", "#f56038"],  # 10
           ["#ae05fc", "#aa7bed"],  # 11
           ["#0b4d93", "#0b4d93"],  # 12
-          ["#e06c75", "#e06c75"],  # 13
-          ["#82aaff", "#82aaff"],  # 14
+          ["#f7a325", "#f7a325"],  # 13
+          ["#FFB800", "#FFB800"],  # 14
           ["#414458", "#575b75"],  # 15
           ["#172b60", "#172b60"],  # 16
           ["#164789", "#164789"],  # 17
-          ["#7AaE4A", "#7AaE4A"],  # 18
-          ["#90ce6a", "#90ce6a"],  # 19
-          ["#00000000", "#00000000"],  # 20
-          ["#56b6c2", "#56b6c2"]]  # 21
+          ["#5FF500", "#5FF500"],  # 18
+          ["#dadc5b", "#c3c459"],  # 19
+          ["#00000000", "#00000000"], # 20
+          ["#56b6c2", "#56b6c2"],  #21
+          ["#c3c459", "#FF0000"]]  #22
 
 layout_theme = {"border_width": 2,
-                "margin": 6,
-                "single_margin": 0,
+                "margin": 8,
+                "single_margin": 8,
                 "single_border_width": 1,
-                "border_focus": colors[8],
+                "border_focus": colors[10],
                 "border_normal": colors[15]
                 }
 
@@ -241,7 +223,7 @@ layouts = [
 widget_defaults = dict(
     font='JetBrains Mono SemiBold',
     fontsize=16,
-    padding=3,
+    padding=4,
     background=colors[20],
 )
 extension_defaults = widget_defaults.copy()
@@ -252,7 +234,7 @@ extension_defaults = widget_defaults.copy()
 def long_name_parse(text):
     mpv = " - mpv"
     for string in ["Firefox", "Atom", "Thonny",
-                   "Telegram", "E-book viewer", mpv]:
+                   "Telegram", "E-book viewer", " LibreOffice ", mpv]:
         if mpv in text:
             text = mpv.replace(' - mpv', 'Media Player')
         elif string in text:
@@ -315,13 +297,13 @@ def bat_charge():
         return ' {}%'.format(integer)
 
 
-def arch_updates():
-    updates_count = subprocess.check_output(home + '/.config/qtile/arch_updates_count.sh').decode("utf-8")
-    integer = int(updates_count)
-    if integer > 0:
-        return ' upd: {}'.format(integer)
-    else:
-        return 'Up to date!'
+# def arch_updates():
+#     updates_count = subprocess.check_output(home + '/.config/qtile/arch_updates_count.sh').decode("utf-8")
+#     integer = int(updates_count)
+#     if integer > 0:
+#         return ' upd: {}'.format(integer)
+#     else:
+#         return 'Up to date!'
 
 
 screens = [
@@ -331,21 +313,29 @@ screens = [
                 widget.Spacer(
                     length=10,
                 ),
-                widget.CurrentLayoutIcon(
-                    background=colors[11],
-                    fontsize=10
+                widget.Image(
+                    filename=home + "/.config/qtile/python.png",
+                    scale="False",
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn("rofi -show run")}
                 ),
                 widget.Spacer(
-                    length=5,
+                    length=10,
                 ),
-                widget.CurrentLayout(
-                    foreground=colors[11],
-                    fontshadow=colors[15],
-                    fontsize=14),
+                widget.CurrentLayoutIcon(
+                    background=colors[22],
+                    padding=0
+                ),
+                widget.Spacer(
+                    length=10,
+                ),
+                # widget.CurrentLayout(
+                #     foreground=colors[2],
+                #     fontshadow=colors[1],
+                #     fontsize=15),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[9],
                 ),
                 widget.GroupBox(
                     fontsize=25,
@@ -356,12 +346,12 @@ screens = [
                     borderwidth=3,
                     active=colors[2],
                     inactive=colors[8],
-                    rounded=True,
-                    highlight_color=colors[11],
+                    # rounded=True,
+                    highlight_color=colors[20],
                     highlight_method="line",
-                    this_current_screen_border=colors[11],
-                    this_screen_border=colors[12],
-                    fontshadow=colors[15],
+                    this_current_screen_border=colors[13],
+                    # this_screen_border=colors[13],
+                    fontshadow=colors[0],
                 ),
                 widget.Spacer(
                     length=6,
@@ -369,20 +359,20 @@ screens = [
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[9],
                 ),
                 widget.Spacer(
                     length=5,
                 ),
                 widget.WindowName(
-                    foreground=colors[6],
-                    fontshadow=colors[15],
+                    foreground=colors[5],
+                    # fontshadow=colors[15],
                     max_chars=0,
                     parse_text=long_name_parse,
                 ),
                 widget.DF(
                     foreground=colors[2],
-                    fontshadow=colors[0],
+                    # fontshadow=colors[0],
                     update_interval=5000,
                     warn_space=5,
                     measure='G',
@@ -398,30 +388,25 @@ screens = [
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.Systray(
                     padding=3,
                     icon_size=20
                 ),
+                # widget.GenPollText(
+                #     foreground=colors[4],
+                #     update_interval=7200,
+                #     padding=1,
+                #     func=arch_updates,
+                #     # fontshadow=colors[15],
+                #     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay')},
+                #     fontsize=15
+                # ),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
-                ),
-                widget.GenPollText(
-                    foreground=colors[7],
-                    update_interval=7200,
-                    padding=1,
-                    func=arch_updates,
-                    fontshadow=colors[15],
-                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay')},
-                    fontsize=15
-                ),
-                widget.Sep(
-                    linewidth=1,
-                    padding=6,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.GenPollText(
                     foreground=colors[6],
@@ -432,81 +417,81 @@ screens = [
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.GenPollText(
-                    foreground=colors[19],
+                    foreground=colors[8],
                     update_interval=1,
                     func=lambda: subprocess.check_output(home + "/.config/qtile/get_current_layout.sh").decode("utf-8"),
-                    fontsize=17
+                    fontsize=16
                 ),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.Clock(
-                    foreground=colors[9],
-                    format="%R:%S  %a.%d.%m.%Y",
-                    padding=3
+                    foreground=colors[13],
+                    format="%R  %a.%d.%m.%Y",
+                    padding=4
                 ),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.TextBox(
-                    text='溜',
-                    foreground=colors[10],
+                    text='',
+                    foreground=colors[18],
                     padding=2,
                     fontsize=23),
                 widget.Memory(
-                    foreground=colors[10],
+                    foreground=colors[18],
                     measure_mem='M',
-                    update_interval=5,
-                    fontshadow=colors[15],
+                    update_interval=4,
+                    # fontshadow=colors[15],
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
                 ),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.WidgetBox(
                     text_closed='漣', text_open='煉',
-                    foreground=colors[19],
+                    foreground=colors[6],
                     fontsize=27,
-                    fontshadow=colors[15],
-                    padding=9,
+                    # fontshadow=colors[15],
+                    padding=10,
                     widgets=[
                         widget.Sep(
                             linewidth=1,
                             padding=8,
-                            foreground=colors[11],
+                            foreground=colors[10],
                         ),
                         widget.TextBox(
                             text=' ',
                             font="Ubuntu Mono",
-                            foreground=colors[8],
-                            fontshadow=colors[15],
+                            foreground=colors[10],
+                            # fontshadow=colors[15],
                             fontsize=18
                         ),
                         widget.Net(
                             interface="wlan0",
                             format='{down}↓↑{up}',
-                            foreground=colors[8],
+                            foreground=colors[10],
                             padding=3,
-                            fontshadow=colors[15]
+                            # fontshadow=colors[15]
                         ),
                         widget.Sep(
                             linewidth=1,
                             padding=8,
-                            foreground=colors[11],
+                            foreground=colors[10],
                         ),
                         widget.CPU(
                             foreground=colors[19],
                             format='CPU Load: {load_percent}',
-                            fontshadow=colors[15],
+                            # fontshadow=colors[15],
                         ),
                         widget.Spacer(
                             length=4),
@@ -515,7 +500,7 @@ screens = [
                 widget.Sep(
                     linewidth=1,
                     padding=8,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.Spacer(
                     length=4),
@@ -523,19 +508,17 @@ screens = [
                     text='⏻',
                     font="Ubuntu Mono",
                     foreground=colors[9],
-                    fontshadow=colors[15],
+                    # fontshadow=colors[10],
                     fontsize=22,
                     padding=2,
-                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn('dm-logout -l 4 -fn "JetBrains Mono SemiBold" '
-                                                                        '-sb "#ae05fc" -sf "#d8d8d8" -nb "#414458" '
-                                                                        '-nf "#d8d8d8"')},
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(home + '/bin/pybye')},
                 ),
                 widget.Spacer(
                     length=4),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[11],
+                    foreground=colors[10],
                 ),
                 widget.Spacer(
                     length=4),
@@ -575,6 +558,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(title='Confirmation'),
     Match(title='Friends List'),
     Match(title='Migrating Plugins'),
+    Match(title='PyBye'),
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"

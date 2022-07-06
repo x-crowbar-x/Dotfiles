@@ -8,7 +8,7 @@ padding:
 dynamic_padding: false
 
 window:
-  opacity: 0.70
+  opacity: 0.60
   dynamic_title: false
   title: Alacritty
 
@@ -17,21 +17,11 @@ class:
   general: Alacritty
 
 scrolling:
-  history: 6000
+  history: 10000
 
   font:
     normal:
-      family: mononoki Nerd Font
-      style: SemiBold
-    bold:
-      family: mononoki Nerd Font
-      style: Bold
-    italic:
-      family: mononoki Nerd Font
-      style: Italic
-    bold_italic:
-      family: mononoki Nerd Font
-      style: Bold Italic
+      family: SpaceMono Nerd Font
     size: 14.0
     offset:
         x: 1
