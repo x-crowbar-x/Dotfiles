@@ -17,7 +17,7 @@ myFileManager = "thunar"
 myOfficeSuite = "libreoffice"
 myTextEditor = "code"
 home = os.path.expanduser('~')
-wallpaper = home + '/Pictures/solar-system-wallpaper-19201080.jpg'
+wallpaper = home + '/.config/qtile/Wallpaper/solar-system-wallpaper-19201080.jpg'
 
 
 @hook.subscribe.startup_once
