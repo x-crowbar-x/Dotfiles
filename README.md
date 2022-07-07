@@ -13,16 +13,17 @@ In this repository you can find some of the configs I use for my Arch Linux inst
 * volumeicon
 * picom
 * rofi
-* dmscripts
 * brightnessctl
 * alacritty
 * pavucontrol (Pulse Audio)
 * maim
 * xkblayout
 * xwallpaper
+* 
 
 **Less important**
 * firefox
 * thunar
 * libreoffice
-* atom
+* VScode
+* PyBye (log-out program in my other repo)
