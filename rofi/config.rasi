@@ -1,6 +1,8 @@
 configuration {
- modi: "window,drun,ssh,combi,run,filebrowser";
+ modi: "drun,combi,run,filebrowser";
  font: "JetBrains Mono SemiBold 10";
  combi-modi: "window,drun,ssh,run";
+ show-icons: true;
+ sidebar-mode: true;
  }
-@theme "~/.config/rofi/themes/dt-center.rasi"
+@theme "~/.config/rofi/themes/rounded-yellow-dark.rasi"

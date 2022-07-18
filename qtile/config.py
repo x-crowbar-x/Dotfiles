@@ -17,7 +17,7 @@ myFileManager = "thunar"
 myOfficeSuite = "libreoffice"
 myTextEditor = "code"
 home = os.path.expanduser('~')
-wallpaper = home + '/.config/qtile/Wallpaper/solar-system-wallpaper-19201080.jpg'
+wallpaper = home + '/.config/qtile/Wallpaper/wp11058350-gruvbox-wallpapers.png'
 
 
 @hook.subscribe.startup_once
@@ -111,10 +111,11 @@ keys = [
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 5%- ")),
 
     # Audio controls (I use volumeicon to controll the volume)
-    # Key([], "XF86AudioMute", lazy.spawn("")),
+    
     # Key([], "XF86AudioLowerVolume", lazy.spawn("")),
     # Key([], "XF86AudioRaiseVolume", lazy.spawn("")),
-    Key([], "XF86AudioMicMute", lazy.spawn("pactl set-source-mute 1 toggle")),
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute 1 toggle")),
+    Key([], "XF86AudioMicMute", lazy.spawn("pactl set-source-mute 2 toggle")),
 
     # Music control buttons
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
@@ -155,37 +156,41 @@ for i, group in enumerate(groups):
         Key([mod, "shift"], actual_key, lazy.window.togroup(group.name))
     ])
 
-colors = [["#282a36", "#282a36"],  # 0
-          ["#44475a", "#44475a"],  # 1
-          ["#ffffff", "#ffffff"],  # 2
-          ["#3080b1", "#3080b1"],  # 3
-          ["#84DEEF", "#84DEEF"],  # 4
-          ["#ffbe00", "#ffbe00"],  # 5
-          ["#dadc5b", "#dadc5b"],  # 6
-          ["#30bfc4", "#30bfc4"],  # 7
-          ["#f56038", "#FF0000"],  # 8
-          ["#FF0000", "#FF0000"],  # 9
-          ["#f56038", "#f56038"],  # 10
-          ["#ae05fc", "#aa7bed"],  # 11
-          ["#0b4d93", "#0b4d93"],  # 12
-          ["#f7a325", "#f7a325"],  # 13
-          ["#FFB800", "#FFB800"],  # 14
+colors = [["#282828", "#282828"],  # 0
+          ["#a89984", "#a89984"],  # 1
+          ["#ebdbb2", "#ebdbb2"],  # 2
+          ["#458588", "#458588"],  # 3
+          ["#83a598", "#83a598"],  # 4
+          ["#8ec07c", "#8ec07c"],  # 5
+          ["#fabd2f", "#fabd2f"],  # 6
+          ["#b8bb26", "#b8bb26"],  # 7
+          ["#cc241d", "#cc241d"],  # 8
+          ["#fe8019", "#fe8019"],  # 9
+          ["#d3869b", "#d3869b"],  # 10
+          ["#98971a", "#98971a"],  # 11
+          ["#d79921", "#d79921"],  # 12
+          ["#d65d0e", "#d65d0e"],  # 13
+          ["#af3a03", "#af3a03"],  # 14
           ["#414458", "#575b75"],  # 15
           ["#172b60", "#172b60"],  # 16
           ["#164789", "#164789"],  # 17
-          ["#5FF500", "#5FF500"],  # 18
-          ["#dadc5b", "#c3c459"],  # 19
-          ["#00000000", "#00000000"], # 20
-          ["#56b6c2", "#56b6c2"],  #21
-          ["#c3c459", "#FF0000"]]  #22
+          ["#98971a", "#b8bb26"],  # 18
+          ["#689d6a", "#689d6a"],  # 19
+          ["#00000000", "#00000000"]] # 20
 
 layout_theme = {"border_width": 2,
-                "margin": 8,
-                "single_margin": 8,
-                "single_border_width": 1,
+                "margin": 0,
+                "single_margin": 0,
+                "single_border_width": 0,
                 "border_focus": colors[10],
                 "border_normal": colors[15]
                 }
+floating_layout_theme = {"border_focus": colors[2],
+                         "border_normal": colors[20],
+                         "border_width": 2,
+                         "fullscreen_border_width": 0,
+                         "max_border_width": 0,
+                         }
 
 layouts = [
     # layout.Matrix(**layout_theme),
@@ -199,7 +204,7 @@ layouts = [
     layout.MonadTall(**layout_theme),
     layout.Max(**layout_theme),
     layout.Stack(**layout_theme),
-    layout.Floating(**layout_theme),
+    layout.Floating(**floating_layout_theme),
     # layout.TreeTab(
     #     font = 'JetBrains Mono',
     #     fontsize = 13,
@@ -233,8 +238,8 @@ extension_defaults = widget_defaults.copy()
 # and shortens them, so that they don't take all the space in the bar
 def long_name_parse(text):
     mpv = " - mpv"
-    for string in ["Firefox", "Atom", "Thonny",
-                   "Telegram", "E-book viewer", " LibreOffice ", mpv]:
+    for string in ["Firefox", "Thonny",
+                   "Telegram", "E-book viewer"]:
         if mpv in text:
             text = mpv.replace(' - mpv', 'Media Player')
         elif string in text:
@@ -297,15 +302,6 @@ def bat_charge():
         return ' {}%'.format(integer)
 
 
-# def arch_updates():
-#     updates_count = subprocess.check_output(home + '/.config/qtile/arch_updates_count.sh').decode("utf-8")
-#     integer = int(updates_count)
-#     if integer > 0:
-#         return ' upd: {}'.format(integer)
-#     else:
-#         return 'Up to date!'
-
-
 screens = [
     Screen(
         top=bar.Bar(
@@ -322,20 +318,19 @@ screens = [
                     length=10,
                 ),
                 widget.CurrentLayoutIcon(
-                    background=colors[22],
+                    background=colors[12],
                     padding=0
                 ),
                 widget.Spacer(
                     length=10,
                 ),
-                # widget.CurrentLayout(
-                #     foreground=colors[2],
-                #     fontshadow=colors[1],
-                #     fontsize=15),
+                widget.CurrentLayout(
+                    foreground=colors[6],
+                    fontsize=14),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[9],
+                    foreground=colors[10],
                 ),
                 widget.GroupBox(
                     fontsize=25,
@@ -345,11 +340,11 @@ screens = [
                     padding_x=3,
                     borderwidth=3,
                     active=colors[2],
-                    inactive=colors[8],
-                    # rounded=True,
+                    inactive=colors[4],
+                    rounded=True,
                     highlight_color=colors[20],
                     highlight_method="line",
-                    this_current_screen_border=colors[13],
+                    this_current_screen_border=colors[6],
                     # this_screen_border=colors[13],
                     fontshadow=colors[0],
                 ),
@@ -359,17 +354,33 @@ screens = [
                 widget.Sep(
                     linewidth=1,
                     padding=6,
-                    foreground=colors[9],
+                    foreground=colors[10],
                 ),
                 widget.Spacer(
                     length=5,
                 ),
-                widget.WindowName(
-                    foreground=colors[5],
-                    # fontshadow=colors[15],
-                    max_chars=0,
+                widget.TaskList(
+                    foreground=colors[6],
+                    border=colors[5],
                     parse_text=long_name_parse,
+                    txt_floating="V ",
+                    txt_maximized="🗖 ",
+                    txt_minimized=" ",
+                    highlight_method="border",
+                    icon_size=20,
+                    margin=0,
+                    max_title_width=220,
+                    padding=3,
+                    fontsize=14,
+                    spacing=3,
+                    urgent_alert_method="text",
                 ),
+                # widget.WindowName(
+                #     foreground=colors[9],
+                #     # fontshadow=colors[15],
+                #     max_chars=0,
+                #     parse_text=long_name_parse,
+                # ),
                 widget.DF(
                     foreground=colors[2],
                     # fontshadow=colors[0],
@@ -394,22 +405,13 @@ screens = [
                     padding=3,
                     icon_size=20
                 ),
-                # widget.GenPollText(
-                #     foreground=colors[4],
-                #     update_interval=7200,
-                #     padding=1,
-                #     func=arch_updates,
-                #     # fontshadow=colors[15],
-                #     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e yay')},
-                #     fontsize=15
-                # ),
                 widget.Sep(
                     linewidth=1,
                     padding=6,
                     foreground=colors[10],
                 ),
                 widget.GenPollText(
-                    foreground=colors[6],
+                    foreground=colors[7],
                     update_interval=2,
                     func=bat_charge,
                     fontsize=16
@@ -420,7 +422,7 @@ screens = [
                     foreground=colors[10],
                 ),
                 widget.GenPollText(
-                    foreground=colors[8],
+                    foreground=colors[6],
                     update_interval=1,
                     func=lambda: subprocess.check_output(home + "/.config/qtile/get_current_layout.sh").decode("utf-8"),
                     fontsize=16
@@ -431,7 +433,7 @@ screens = [
                     foreground=colors[10],
                 ),
                 widget.Clock(
-                    foreground=colors[13],
+                    foreground=colors[5],
                     format="%R  %a.%d.%m.%Y",
                     padding=4
                 ),
@@ -440,16 +442,11 @@ screens = [
                     padding=6,
                     foreground=colors[10],
                 ),
-                widget.TextBox(
-                    text='',
-                    foreground=colors[18],
-                    padding=2,
-                    fontsize=23),
                 widget.Memory(
-                    foreground=colors[18],
+                    foreground=colors[9],
                     measure_mem='M',
-                    update_interval=4,
-                    # fontshadow=colors[15],
+                    update_interval=1,
+                    padding=0,
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
                 ),
                 widget.Sep(
@@ -459,7 +456,7 @@ screens = [
                 ),
                 widget.WidgetBox(
                     text_closed='漣', text_open='煉',
-                    foreground=colors[6],
+                    foreground=colors[7],
                     fontsize=27,
                     # fontshadow=colors[15],
                     padding=10,
@@ -489,7 +486,7 @@ screens = [
                             foreground=colors[10],
                         ),
                         widget.CPU(
-                            foreground=colors[19],
+                            foreground=colors[7],
                             format='CPU Load: {load_percent}',
                             # fontshadow=colors[15],
                         ),
@@ -507,7 +504,7 @@ screens = [
                 widget.TextBox(
                     text='⏻',
                     font="Ubuntu Mono",
-                    foreground=colors[9],
+                    foreground=colors[8],
                     # fontshadow=colors[10],
                     fontsize=22,
                     padding=2,
@@ -523,7 +520,7 @@ screens = [
                 widget.Spacer(
                     length=4),
             ],
-            size=20,
+            size=25,
             opacity=1,
             background=colors[20],
             margin=1
@@ -558,7 +555,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(title='Confirmation'),
     Match(title='Friends List'),
     Match(title='Migrating Plugins'),
-    Match(title='PyBye'),
+    Match(title='PyBye')
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-picom --experimental-backend &
+picom --experimental-backends &
 nm-applet &
 # blueman-applet &
 volumeicon &
+light-locker &
